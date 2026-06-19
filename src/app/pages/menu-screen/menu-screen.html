@@ -1,0 +1,36 @@
+<div class="menu-container">
+  <h1 class="title">TechnoPoker</h1>
+
+  @if(!confirmedUsername){
+    <form [formGroup]="form" class="username-box">
+  
+      <input
+        type="text"
+        class="username-input"
+        formControlName="username"
+        placeholder="Entrez votre pseudo"
+      />
+  
+      <button
+        type="button"
+        class="btn confirm"
+        (click)="confirmUsername()"
+        [disabled]="form.invalid"
+      >
+        Confirmer
+      </button>
+  
+    </form>
+  }
+  @else {
+    <p class="current-user">
+      Joueur connecté : <strong>{{ username }}</strong>
+    </p>
+  }
+
+
+  <div class="menu">
+    <button class="btn primary" [disabled]="!confirmedUsername" (click)="createGame()">Créer une partie</button>
+    <button class="btn secondary" [disabled]="!confirmedUsername" (click)="joinGame()">Rejoindre une partie</button>
+  </div>
+</div>
