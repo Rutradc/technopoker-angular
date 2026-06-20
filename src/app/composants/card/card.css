@@ -6,7 +6,7 @@
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
   position: relative;
   font-family: 'Segoe UI', sans-serif;
-  color: #d40000; /* rouge pour carreau */
+  color: var(--color); /* rouge pour carreau */
   display: flex;
   justify-content: center;
   align-items: center;

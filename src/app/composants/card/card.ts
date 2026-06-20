@@ -1,4 +1,5 @@
-import { Component, Input } from '@angular/core';
+import { Component, HostBinding, Input } from '@angular/core';
+import { CardModel } from '../../models/cardModel';
 
 @Component({
   selector: 'app-card',
@@ -7,13 +8,19 @@ import { Component, Input } from '@angular/core';
   styleUrl: './card.css',
 })
 export class Card {
+  @Input() card: CardModel | undefined;
   @Input() value : string = '';
   @Input() suit : string = '';
   suitIcon: string = '';
   valueShowed: string = '';
+  @HostBinding('style.--color') color = '#d40000';
 
   ngOnInit(): void {
-    switch (this.suit){
+    if (!this.card) {
+      this.card = new CardModel(this.value, this.suit);
+    }
+
+    switch (this.card.suit){
       case 'hearts':
         this.suitIcon = '♥'
         break;
@@ -22,12 +29,14 @@ export class Card {
         break;
       case 'clubs':
         this.suitIcon = '♣'
+        this.color = '#000000'
         break;
       case 'spades':
         this.suitIcon = '♠'
+        this.color = '#000000'
     }
     
-    switch (this.value){
+    switch (this.card.value){
       case 'king':
         this.valueShowed = 'K'
         break;
@@ -41,7 +50,7 @@ export class Card {
         this.valueShowed = 'A'
         break;
       default:
-        this.valueShowed = this.value
+        this.valueShowed = this.card.value
     }
   }
 }

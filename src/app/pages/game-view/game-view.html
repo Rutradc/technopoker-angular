@@ -1,1 +1,54 @@
-<p>game-view works!</p>
+<div class="game-table">
+
+  <!-- 💰 POT -->
+  <div class="pot">
+    Pot : {{ pot }} jetons
+  </div>
+
+  <!-- 🃏 CARTES COMMUNES -->
+  <div class="community-cards">
+    @for(card of communityCards; track $index){
+        <app-card [card]="card"></app-card>
+    }
+  </div>
+
+  <!-- 🎴 MAIN JOUEUR -->
+  <div class="player-hand">
+    @for(card of playerHand; track $index){
+        <app-card [card]="card"></app-card>
+    }
+  </div>
+
+  <!-- 🎮 ACTIONS -->
+  <div class="actions">
+    <button class="btn fold" (click)="fold()">Fold</button>
+
+    <button class="btn call" (click)="call()">Call</button>
+
+    <form [formGroup]="raiseForm" class="raise-box">
+          <input
+            type="number"  
+            step=5
+            min=5
+            formControlName="raiseAmount"
+            placeholder="Montant à relancer"
+           />
+          <button class="btn raise" (click)="raise()">Raise</button>
+    </form>
+  </div>
+
+  <!-- 👤 JOUEURS -->
+  <div class="players">
+    @for(p of players; track $index){
+        <div
+          class="player"
+          [class.active]="p.isTurn"
+          [class.folded]="!p.inRound"
+        >
+          <div class="name">{{ p.username }}</div>
+          <div>💰 {{ p.chips }}</div>
+          <div>Mise : {{ p.bet }}</div>
+        </div>
+    }
+  </div>
+</div>
