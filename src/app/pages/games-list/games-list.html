@@ -1,1 +1,18 @@
-<p>games-list works!</p>
+<div class="table-list">
+
+  <h2>Tables disponibles</h2>
+    @for(table of tables; track $index){
+        <div class="table-card">
+            <div class="info">
+            <p><strong>Table #{{ table.id }}</strong></p>
+            <p>Joueurs : {{ table.num_players }}</p>
+            <p>Hôte : {{ table.host_name }}</p>
+            </div>
+
+            <button class="btn join" (click)="joinTable(table)">
+                Rejoindre
+            </button>
+        </div>
+    }
+
+</div>

@@ -1,0 +1,11 @@
+.waiting-room {
+  text-align: center;
+  color: white;
+  margin-top: 50px;
+}
+
+.status {
+  margin-top: 20px;
+  font-style: italic;
+  opacity: 0.8;
+}

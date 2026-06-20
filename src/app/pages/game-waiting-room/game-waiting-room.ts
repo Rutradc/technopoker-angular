@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { TableInfo } from '../../models/tableModel';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-game-waiting-room',
@@ -6,4 +8,21 @@ import { Component } from '@angular/core';
   templateUrl: './game-waiting-room.html',
   styleUrl: './game-waiting-room.css',
 })
-export class GameWaitingRoom {}
+export class GameWaitingRoom {
+  tableId!: number;
+
+  table?: TableInfo;
+
+  constructor(private route: ActivatedRoute) {}
+
+  ngOnInit(): void {
+    this.tableId = Number(this.route.snapshot.paramMap.get('id'));
+
+    // ⚠️ simulation (plus tard → API backend)
+    this.table = {
+      id: this.tableId,
+      num_players: 3,
+      host_name: 'Alice'
+    };
+  }
+}

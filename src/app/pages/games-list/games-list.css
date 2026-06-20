@@ -1,0 +1,19 @@
+.table-list {
+  padding: 20px;
+  color: white;
+}
+
+.table-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(0,0,0,0.3);
+  padding: 15px;
+  margin-bottom: 10px;
+  border-radius: 10px;
+}
+
+.join {
+  background: #00c853;
+  color: black;
+}

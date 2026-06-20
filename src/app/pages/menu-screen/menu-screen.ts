@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-menu-screen',
@@ -12,7 +13,7 @@ export class MenuScreen {
   username: string = '';
   confirmedUsername = false;
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder, private router: Router) {
     const saved = localStorage.getItem('username');
 
     this.form = this.fb.group({
@@ -32,9 +33,12 @@ export class MenuScreen {
 
   createGame() {
     console.log('Créer partie avec:', this.username);
+    let id = 1 // to change later with the id of the created table
+    this.router.navigate([`/table/${id}`]);
   }
 
   joinGame() {
     console.log('Rejoindre partie avec:', this.username);
+    this.router.navigate(['/tables']);
   }
 }

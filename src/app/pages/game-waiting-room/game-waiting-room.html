@@ -1,1 +1,12 @@
-<p>game-waiting-room works!</p>
+@if (table) {
+    <div class="waiting-room">
+    
+      <h2>Table #{{ table.id }}</h2>
+    
+      <p>Hôte : <strong>{{ table.host_name }}</strong></p>
+      <p>Nombre de joueurs : {{ table.num_players }}</p>
+    
+      <p class="status">En attente d'autres joueurs...</p>
+    
+    </div>
+}
