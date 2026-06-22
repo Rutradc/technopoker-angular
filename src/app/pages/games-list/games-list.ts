@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
-import { TableInfo } from '../../models/tableModel';
+import { Component, signal } from '@angular/core';
+import { Table } from '../../models/tableModel';
 import { Router } from '@angular/router';
+import { TableService } from '../../services/TableService';
 
 @Component({
   selector: 'app-games-list',
@@ -9,15 +10,23 @@ import { Router } from '@angular/router';
   styleUrl: './games-list.css',
 })
 export class GamesList {
-   tables: TableInfo[] = [
-    { id: 1, num_players: 2, host_name: 'Alice' },
-    { id: 2, num_players: 4, host_name: 'Bob' },
-    { id: 3, num_players: 1, host_name: 'Charlie' }
-  ];
+  tables$ = signal<Table[]>([]);
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, public tableService: TableService) {}
 
-  joinTable(table: TableInfo) {
-    this.router.navigate(['/table', table.id]);
+  ngOnInit(): void {
+    if (localStorage.getItem('username') === null) {
+      this.router.navigate(['']);
+    }
+    if (!this.tableService.connected()) {
+      this.tableService.connect();
+    }
+
+    this.tableService.listTables();
+    this.tables$ = this.tableService.tableList$;
+  }
+
+  joinTable(table: Table) {
+    this.router.navigate(['/table', table.table_id]);
   }
 }

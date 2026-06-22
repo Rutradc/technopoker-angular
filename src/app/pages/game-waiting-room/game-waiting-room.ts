@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
-import { TableInfo } from '../../models/tableModel';
+import { Component, signal } from '@angular/core';
+import { Table } from '../../models/tableModel';
 import { ActivatedRoute, Router } from '@angular/router';
+import { TableService } from '../../services/TableService';
 
 @Component({
   selector: 'app-game-waiting-room',
@@ -11,24 +12,36 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class GameWaitingRoom {
   tableId!: number;
 
-  table?: TableInfo;
+  table$ = signal<Table | null>(null);
   username: string = localStorage.getItem('username') || '';
 
-  constructor(private route: ActivatedRoute, private router: Router) {}
+  constructor(private route: ActivatedRoute, private router: Router, private tableService: TableService) {}
 
   ngOnInit(): void {
-    this.tableId = Number(this.route.snapshot.paramMap.get('id'));
+    if (localStorage.getItem('username') === null) {
+      this.router.navigate(['']);
+    }
+    if (!this.tableService.connected()) {
+      this.tableService.connect();
+      this.tableService.joinTable(Number(this.route.snapshot.paramMap.get('id')));
+    }
 
+    if (!this.tableService.currentTable$()) {
+      this.tableService.joinTable(Number(this.route.snapshot.paramMap.get('id')));
+    }
+    // this.tableId = Number(this.route.snapshot.paramMap.get('id'));
+
+    this.table$ = this.tableService.currentTable$;
     // ⚠️ simulation (plus tard → API backend)
-    this.table = {
-      id: this.tableId,
-      num_players: 3,
-      host_name: 'Alice'
-    };
+    // this.table = {
+    //   id: this.tableId,
+    //   num_players: 3,
+    //   host_name: 'Alice'
+    // };
   }
 
   startGame() {
-    console.log('Démarrage de la partie pour la table', this.table?.id);
-    this.router.navigate(['/game', this.table?.id]);
+    console.log('Démarrage de la partie pour la table', this.table$()?.table_id);
+    this.router.navigate(['/game', this.table$()?.table_id]);
   }
 }

@@ -1,15 +1,17 @@
-export class TableInfo{
-    id: number;
-    num_players: number;
-    host_name: string;
-
-    constructor(id: number, num_players: number, host_name: string){
-        this.id = id;
-        this.num_players = num_players;
-        this.host_name = host_name;
-    }
-}
+import { Player } from "./playerModel";
 
 export class Table{
-    
+    table_id: number;
+    host_name: string;
+    table_cards: { [key: string]: string }[];
+    pot: number;
+    players: Player[];
+
+    constructor(table_id: number, host_name: string, table_cards: { [key: string]: string }[], pot: number, players: Player[]) {
+        this.table_id = table_id;
+        this.host_name = host_name;
+        this.table_cards = table_cards;
+        this.pot = pot;
+        this.players = players;
+    }
 }

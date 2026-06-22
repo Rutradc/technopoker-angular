@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { TableService } from '../../services/TableService';
 
 @Component({
   selector: 'app-menu-screen',
@@ -13,12 +14,16 @@ export class MenuScreen {
   username: string = '';
   confirmedUsername = false;
 
-  constructor(private fb: FormBuilder, private router: Router) {
+  constructor(private fb: FormBuilder, private router: Router, private tableService: TableService) {
     const saved = localStorage.getItem('username');
 
     this.form = this.fb.group({
       username: [saved ? saved : '', [Validators.required, Validators.minLength(2)]]
     });
+
+    if (!this.tableService.connected()) {
+      this.tableService.disconnect();
+    }
   }
 
   confirmUsername() {
@@ -29,11 +34,14 @@ export class MenuScreen {
     this.username = value;
     localStorage.setItem('username', value);
     this.confirmedUsername = true;
+    this.tableService.connect();
   }
 
-  createGame() {
+  async createGame() {
     console.log('Créer partie avec:', this.username);
-    let id = 1 // to change later with the id of the created table
+    await this.tableService.createTable();
+    console.log(this.tableService.currentTable$());
+    let id = this.tableService.currentTable$()?.table_id;
     this.router.navigate([`/table/${id}`]);
   }
 
