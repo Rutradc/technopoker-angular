@@ -17,13 +17,16 @@ export class GameWaitingRoom {
 
   constructor(private route: ActivatedRoute, private router: Router, private tableService: TableService) {}
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     if (localStorage.getItem('username') === null) {
       this.router.navigate(['']);
     }
     if (!this.tableService.connected()) {
       this.tableService.connect();
-      this.tableService.joinTable(Number(this.route.snapshot.paramMap.get('id')));
+      await this.tableService.joinTable(Number(this.route.snapshot.paramMap.get('id')));
+      if (!this.tableService.currentTable$()) {
+        this.router.navigate(['/tables']);
+      } // TODO: gérer le cas où la table n'existe pas ou est pleine
     }
 
     if (!this.tableService.currentTable$()) {

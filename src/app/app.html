@@ -1,3 +1,8 @@
 <div class="main-background">
+  @if (username != '') {
+    <div class="global-player-hud">
+      Connecté en tant que : <span class="username">{{ username }}</span>
+    </div>
+  }
   <router-outlet></router-outlet>
 </div>

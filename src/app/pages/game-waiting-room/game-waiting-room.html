@@ -1,36 +1,59 @@
 @if (table$()) {
-    <div class="waiting-room">
+  <div class="waiting-room">
 
     <h2>Table #{{ table$()!.table_id }}</h2>
 
-    <div class="table-info">
+    <div class="content">
 
+      <!-- 🟢 TABLE INFOS -->
+      <div class="table-info">
         <table>
-        <tr>
+          <tr>
             <th>Hôte</th>
             <td>{{ table$()!.host_name }}</td>
-        </tr>
+          </tr>
 
-        <tr>
+          <tr>
             <th>Joueurs</th>
-            <td>{{ table$()!.players.length }}
-        </tr>
+            <td>{{ table$()!.players.length }}</td>
+          </tr>
 
-        <tr>
+          <tr>
             <th>ID Table</th>
             <td>#{{ table$()!.table_id }}</td>
-        </tr>
+          </tr>
         </table>
+      </div>
+
+      <!-- 🟡 LISTE JOUEURS -->
+      <div class="players-list">
+        <h3>Joueurs</h3>
+
+        <ul>
+          @for (player of table$()!.players; track player) {
+            <li>
+                {{ player.player_name }}
+                @if (player.player_name === username) {
+                    <span class="me-badge">vous</span>
+                }
+            </li>
+          }
+        </ul>
+      </div>
 
     </div>
 
     <p class="status">En attente d'autres joueurs...</p>
+
     @if (table$()!.host_name == username) {
-        <p class="host-message">Vous êtes l'hôte de cette table. Vous pouvez lancer la partie lorsque tous les joueurs sont prêts.</p>
-        <button class="btn start" (click)="startGame()">
-            Lancer la partie
-        </button>
+      <p class="host-message">
+        Vous êtes l'hôte de cette table. Vous pouvez lancer la partie lorsque tous les joueurs sont prêts.
+      </p>
+
+      <button class="btn start" (click)="startGame()">
+        Lancer la partie
+      </button>
     }
 
-    </div>
+  </div>
 }

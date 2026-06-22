@@ -74,3 +74,76 @@ tr:not(:last-child) {
   font-size: 16px;
   color: #ffd54f;
 }
+
+/* layout horizontal */
+.content {
+  display: flex;
+  gap: 40px;
+  justify-content: center;
+  align-items: flex-start;
+  margin-top: 20px;
+}
+
+/* bloc joueurs */
+.players-list {
+  min-width: 200px;
+  background: rgba(0, 0, 0, 0.25);
+  border-radius: 10px;
+  padding: 15px;
+
+  box-shadow: 0 6px 15px rgba(0,0,0,0.4);
+}
+
+/* titre */
+.players-list h3 {
+  text-align: center;
+  margin-bottom: 10px;
+  color: #ffd54f;
+}
+
+/* liste */
+.players-list ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* joueur */
+.players-list li {
+  padding: 8px 10px;
+  border-radius: 6px;
+  margin-bottom: 6px;
+
+  background: rgba(255,255,255,0.05);
+}
+
+/* effet hover sympa */
+.players-list li:hover {
+  background: rgba(255, 213, 79, 0.15);
+}
+
+
+/* ============================= */
+/* OPTION 3 — badge "vous" dans la liste */
+/* ============================= */
+
+.players-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* badge joueur courant */
+.me-badge {
+  font-size: 12px;
+  font-weight: bold;
+  padding: 3px 8px;
+  border-radius: 12px;
+
+  background: linear-gradient(135deg, #ffd54f, #ffb300);
+  color: #3a2f00;
+
+  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
