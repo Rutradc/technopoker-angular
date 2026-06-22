@@ -29,4 +29,8 @@ export class GamesList {
   joinTable(table: Table) {
     this.router.navigate(['/table', table.table_id]);
   }
+
+  goToMenu() {
+    this.router.navigate(['']);
+  }
 }

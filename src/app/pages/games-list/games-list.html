@@ -1,18 +1,25 @@
 <div class="table-list">
 
-  <h2>Tables disponibles</h2>
-    @for(table of tables$(); track $index){
-        <div class="table-card">
-            <div class="info">
-            <p><strong>Table #{{ table.table_id }}</strong></p>
-            <p>Joueurs : {{ table.players.length }}</p>
-            <p>Hôte : {{ table.host_name }}</p>
-            </div>
+  <button class="btn back" (click)="goToMenu()">
+    ← Menu principal
+  </button>
 
-            <button class="btn join" (click)="joinTable(table)">
-                Rejoindre
-            </button>
+  <h2>Tables disponibles</h2>
+
+  <div class="tables-container">
+    @for(table of tables$(); track $index){
+      <div class="table-card">
+        <div class="info">
+          <p><strong>Table #{{ table.table_id }}</strong></p>
+          <p>Joueurs : {{ table.players.length }}</p>
+          <p>Hôte : {{ table.host_name }}</p>
         </div>
+
+        <button class="btn join" (click)="joinTable(table)">
+          Rejoindre
+        </button>
+      </div>
     }
+  </div>
 
 </div>

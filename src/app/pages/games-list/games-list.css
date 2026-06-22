@@ -5,15 +5,77 @@
 
 .table-card {
   display: flex;
+  flex-direction: column;
   justify-content: space-between;
-  align-items: center;
+
   background: rgba(0,0,0,0.3);
   padding: 15px;
-  margin-bottom: 10px;
-  border-radius: 10px;
+  border-radius: 12px;
+
+  min-height: 140px;
+
+  box-shadow: 0 6px 15px rgba(0,0,0,0.35);
+  transition: 0.2s;
+}
+
+.table-card:hover {
+  transform: translateY(-3px);
+  background: rgba(0,0,0,0.4);
 }
 
 .join {
   background: #00c853;
   color: black;
+}
+
+/* ============================= */
+/* GRID TABLE LIST */
+/* ============================= */
+
+.tables-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+
+  margin-top: 15px;
+
+  max-height: 75vh;
+  overflow-y: auto;
+
+  padding-right: 8px;
+}
+
+.tables-container::-webkit-scrollbar {
+  width: 6px;
+}
+
+.tables-container::-webkit-scrollbar-thumb {
+  background: rgba(255, 213, 79, 0.4);
+  border-radius: 10px;
+}
+
+.tables-container::-webkit-scrollbar-track {
+  background: rgba(255,255,255,0.05);
+}
+
+.back {
+  margin-bottom: 15px;
+
+  background: rgba(255, 213, 79, 0.15);
+  color: #ffd54f;
+
+  border: 1px solid rgba(255, 213, 79, 0.3);
+
+  padding: 10px 14px;
+  border-radius: 8px;
+
+  cursor: pointer;
+  font-weight: bold;
+
+  transition: 0.2s;
+}
+
+.back:hover {
+  background: rgba(255, 213, 79, 0.25);
+  transform: translateY(-1px);
 }
