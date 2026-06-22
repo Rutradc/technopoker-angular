@@ -69,14 +69,18 @@ export class TableService {
   async joinTable(tableId: number): Promise<void> {
     const response = await this.socket?.emitWithAck('join_table', { table_id: tableId });
     console.log('joinTable response:', response);
-    const table: Table = new Table(
-      response.table_id,
-      response.host_name,
-      response.table_cards,
-      response.pot,
-      response.players
-    );
-    this.currentTable$.set(table);
+    if (response) {
+      const table: Table = new Table(
+        response.table_id,
+        response.host_name,
+        response.table_cards,
+        response.pot,
+        response.players
+      );
+      this.currentTable$.set(table);
+    }
+    else
+      this.currentTable$.set(null);
   }
 
   async listTables(): Promise<void> {

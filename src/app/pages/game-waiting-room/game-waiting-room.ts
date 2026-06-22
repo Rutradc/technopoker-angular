@@ -26,6 +26,7 @@ export class GameWaitingRoom {
       await this.tableService.joinTable(Number(this.route.snapshot.paramMap.get('id')));
       if (!this.tableService.currentTable$()) {
         this.router.navigate(['/tables']);
+        alert('La table est introuvable ou pleine.');
       } // TODO: gérer le cas où la table n'existe pas ou est pleine
     }
 
