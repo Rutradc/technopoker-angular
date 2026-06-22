@@ -1,12 +1,36 @@
 @if (table) {
     <div class="waiting-room">
-    
-      <h2>Table #{{ table.id }}</h2>
-    
-      <p>Hôte : <strong>{{ table.host_name }}</strong></p>
-      <p>Nombre de joueurs : {{ table.num_players }}</p>
-    
-      <p class="status">En attente d'autres joueurs...</p>
-    
+
+    <h2>Table #{{ table.id }}</h2>
+
+    <div class="table-info">
+
+        <table>
+        <tr>
+            <th>Hôte</th>
+            <td>{{ table.host_name }}</td>
+        </tr>
+
+        <tr>
+            <th>Joueurs</th>
+            <td>{{ table.num_players }}</td>
+        </tr>
+
+        <tr>
+            <th>ID Table</th>
+            <td>#{{ table.id }}</td>
+        </tr>
+        </table>
+
+    </div>
+
+    <p class="status">En attente d'autres joueurs...</p>
+    @if (table.host_name == username) {
+        <p class="host-message">Vous êtes l'hôte de cette table. Vous pouvez lancer la partie lorsque tous les joueurs sont prêts.</p>
+        <button class="btn start" (click)="startGame()">
+            Lancer la partie
+        </button>
+    }
+
     </div>
 }

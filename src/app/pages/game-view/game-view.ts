@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CardModel } from '../../models/cardModel';
 import { Card } from "../../composants/card/card";
@@ -14,6 +14,7 @@ export class GameView {
   raiseAmount = 10;
 
   pot = 120;
+  showTurnMessage = false;
 
   communityCards = [
     new CardModel('A', 'hearts'), 
@@ -34,10 +35,15 @@ export class GameView {
     { username: 'Charlie', chips: 150, bet: 0, inRound: false, isTurn: false }
   ];
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder, private cdr: ChangeDetectorRef) {
     this.raiseForm = this.fb.group({
       raiseAmount: [this.raiseAmount, [Validators.required, Validators.min(5)]]
     });
+  }
+
+  ngOnInit(): void {
+    // simulation d'un tour de jeu
+    this.showTurnNotification();
   }
 
   fold() {
@@ -52,5 +58,14 @@ export class GameView {
     const value = this.raiseForm.value.raiseAmount;
     this.raiseAmount = value;
     console.log('Raise:', this.raiseAmount);
+  }
+
+  showTurnNotification() {
+    this.showTurnMessage = true;
+
+    setTimeout(() => {
+      this.showTurnMessage = false;
+      this.cdr.detectChanges();
+    }, 1900);
   }
 }

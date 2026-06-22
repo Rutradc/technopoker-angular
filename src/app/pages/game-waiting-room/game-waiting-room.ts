@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { TableInfo } from '../../models/tableModel';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-game-waiting-room',
@@ -12,8 +12,9 @@ export class GameWaitingRoom {
   tableId!: number;
 
   table?: TableInfo;
+  username: string = localStorage.getItem('username') || '';
 
-  constructor(private route: ActivatedRoute) {}
+  constructor(private route: ActivatedRoute, private router: Router) {}
 
   ngOnInit(): void {
     this.tableId = Number(this.route.snapshot.paramMap.get('id'));
@@ -24,5 +25,10 @@ export class GameWaitingRoom {
       num_players: 3,
       host_name: 'Alice'
     };
+  }
+
+  startGame() {
+    console.log('Démarrage de la partie pour la table', this.table?.id);
+    this.router.navigate(['/game', this.table?.id]);
   }
 }

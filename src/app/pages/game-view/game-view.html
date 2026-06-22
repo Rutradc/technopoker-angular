@@ -1,5 +1,11 @@
 <div class="game-table">
-
+  @if (showTurnMessage) {
+    <div class="turn-overlay">
+      <div class="turn-message">
+        🎯 À ton tour !
+      </div>
+    </div>
+  }
   <!-- 💰 POT -->
   <div class="pot">
     Pot : {{ pot }} jetons

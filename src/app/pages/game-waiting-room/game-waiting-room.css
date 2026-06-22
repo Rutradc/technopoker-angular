@@ -1,11 +1,76 @@
 .waiting-room {
   text-align: center;
   color: white;
-  margin-top: 50px;
+  margin-top: 40px;
 }
 
+/* tableau */
+.table-info {
+  display: flex;
+  justify-content: center;
+  margin: 20px 0;
+}
+
+table {
+  border-collapse: collapse;
+  min-width: 280px;
+  background: rgba(0, 0, 0, 0.25);
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 6px 15px rgba(0,0,0,0.4);
+}
+
+/* cellules */
+th, td {
+  padding: 12px 18px;
+  text-align: left;
+}
+
+th {
+  background: rgba(0, 0, 0, 0.4);
+  color: #ffd54f; /* or casino */
+  font-weight: 600;
+}
+
+td {
+  color: #e8f5e9;
+}
+
+/* lignes séparées */
+tr:not(:last-child) {
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+/* status */
 .status {
-  margin-top: 20px;
+  margin-top: 10px;
   font-style: italic;
   opacity: 0.8;
+}
+
+/* bouton start */
+.start {
+  margin-top: 25px;
+  padding: 14px 30px;
+  font-size: 18px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+
+  background: linear-gradient(135deg, #ffd54f, #ffb300);
+  color: #3a2f00;
+
+  box-shadow: 0 6px 15px rgba(0,0,0,0.4);
+  transition: 0.2s;
+}
+
+.start:hover {
+  transform: translateY(-2px) scale(1.05);
+}
+
+.host-message {
+  margin-top: 20px;
+  font-size: 16px;
+  color: #ffd54f;
 }

@@ -101,3 +101,61 @@
 .player.folded {
   opacity: 0.5;
 }
+
+/* overlay plein écran */
+.turn-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background: rgba(0, 0, 0, 0.4); /* léger voile */
+  z-index: 9999;
+
+  pointer-events: none; /* ne bloque pas les clics */
+}
+
+/* message central */
+.turn-message {
+  font-size: 48px;
+  font-weight: bold;
+  color: #ffd54f;
+
+  padding: 30px 60px;
+  border-radius: 16px;
+
+  background: radial-gradient(circle, #1b5e20, #0d3b1e);
+
+  box-shadow:
+    0 0 30px rgba(0,0,0,0.7),
+    0 0 20px rgba(255, 213, 79, 0.4);
+
+  text-align: center;
+
+  animation: popIn 0.4s ease, fadeOut 0.4s ease 1.2s forwards;
+}
+
+/* animation entrée */
+@keyframes popIn {
+  from {
+    transform: scale(0.7);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* animation sortie */
+@keyframes fadeOut {
+  to {
+    opacity: 0;
+    transform: scale(1.1);
+  }
+}
