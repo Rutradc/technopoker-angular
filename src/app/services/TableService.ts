@@ -63,6 +63,16 @@ export class TableService {
         );
       }
     });
+
+    this.socket.on('game_started', (data: any) => {
+      const current = this.currentTable$();
+      console.log('game_started event received:', data);
+      if (!current) return;
+
+      this.currentTable$.set(
+        new Table(current.table_id, data.host_name, data.table_cards, data.pot, data.players),
+      );
+    });
   }
 
   // emit events
