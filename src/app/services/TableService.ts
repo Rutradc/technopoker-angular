@@ -63,6 +63,35 @@ export class TableService {
         );
       }
     });
+
+    this.socket.on('game_started', (data: any) => {
+      const current = this.currentTable$();
+      console.log('game_started event received:', data);
+      if (!current) return;
+
+      this.currentTable$.set(
+        new Table(current.table_id, data.host_name, data.table_cards, data.pot, data.players),
+      );
+    });
+
+    this.socket.on('cards_dealt', (data: any) => {
+      const current = this.currentTable$();
+      console.log('cards_dealt event received:', data);
+      if (!current) return;
+
+      const updatedPlayers = current.players.map((p) =>
+        p.player_name === localStorage.getItem('username') ? { ...p, hand: data.hand } : p,
+      );
+      this.currentTable$.set(
+        new Table(
+          current.table_id,
+          current.host_name,
+          current.table_cards,
+          current.pot,
+          updatedPlayers,
+        ),
+      );
+    });
   }
 
   // emit events
