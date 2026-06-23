@@ -11,9 +11,11 @@ export class Card {
   @Input() card: CardModel | undefined;
   @Input() value : string = '';
   @Input() suit : string = '';
+  @Input() size : string = 'm';
   suitIcon: string = '';
   valueShowed: string = '';
   @HostBinding('style.--color') color = '#d40000';
+  @HostBinding('style.--size') sizeClass = 'm';
 
   ngOnInit(): void {
     if (!this.card) {
@@ -51,6 +53,18 @@ export class Card {
         break;
       default:
         this.valueShowed = this.card.value
+    }
+
+    switch (this.size){
+      case 's':
+        this.sizeClass = 's'
+        break;
+      case 'm':
+        this.sizeClass = 'm'
+        break;
+      case 'l':
+        this.sizeClass = 'l'
+        break;
     }
   }
 }

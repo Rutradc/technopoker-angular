@@ -12,6 +12,31 @@
   align-items: center;
 }
 
+.card {
+  --scale: 1;
+  transform: scale(var(--scale));
+}
+
+.card.s {
+  --scale: 0.5;
+}
+
+.card.m {
+  --scale: 1;
+}
+
+.card.l {
+  --scale: 1.33;
+}
+
+.card:hover {
+  transform: scale(var(--scale)) translateY(calc(-5px * var(--scale)));
+}
+
+.card.s:hover {
+  transform: scale(0.7) translateY(calc(-5px * 0.7));
+}
+
 /* Coins */
 .corner {
   position: absolute;
