@@ -7,6 +7,11 @@ export class Table {
   table_cards: CardModel[];
   pot: number;
   players: Player[];
+  current_player_name: string | null;
+  small_blind_value: number | null;
+  big_blind_value: number | null;
+  small_blind_player_name: string | null;
+  big_blind_player_name: string | null;
 
   constructor(
     table_id: number,
@@ -14,11 +19,21 @@ export class Table {
     table_cards: CardModel[],
     pot: number,
     players: Player[],
+    current_player_name: string | null,
+    small_blind_value: number | null,
+    big_blind_value: number | null,
+    small_blind_player_name: string | null,
+    big_blind_player_name: string | null,
   ) {
     this.table_id = table_id;
     this.host_name = host_name;
     this.table_cards = table_cards;
     this.pot = pot;
     this.players = players;
+    this.current_player_name = current_player_name;
+    this.small_blind_value = small_blind_value;
+    this.big_blind_value = big_blind_value;
+    this.small_blind_player_name = small_blind_player_name;
+    this.big_blind_player_name = big_blind_player_name;
   }
 }

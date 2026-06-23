@@ -47,8 +47,13 @@ export class TableService {
             data.host_name,
             current.table_cards,
             current.pot,
-            updatedPlayers
-          )
+            updatedPlayers,
+            current.current_player_name,
+            current.small_blind_value,
+            current.big_blind_value,
+            current.small_blind_player_name,
+            current.big_blind_player_name,
+          ),
         );
       } else {
         const updatedPlayers = current.players.filter((p) => p.player_name !== data.player.player_name);
@@ -58,8 +63,13 @@ export class TableService {
             data.host_name,
             current.table_cards,
             current.pot,
-            updatedPlayers
-          )
+            updatedPlayers,
+            current.current_player_name,
+            current.small_blind_value,
+            current.big_blind_value,
+            current.small_blind_player_name,
+            current.big_blind_player_name,
+          ),
         );
       }
     });
@@ -70,7 +80,18 @@ export class TableService {
       if (!current) return;
 
       this.currentTable$.set(
-        new Table(current.table_id, data.host_name, data.table_cards, data.pot, data.players),
+        new Table(
+          current.table_id,
+          data.host_name,
+          data.table_cards,
+          data.pot,
+          data.players,
+          data.current_player_name,
+          data.small_blind_value,
+          data.big_blind_value,
+          data.small_blind_player_name,
+          data.big_blind_player_name,
+        ),
       );
     });
 
@@ -89,6 +110,11 @@ export class TableService {
           current.table_cards,
           current.pot,
           updatedPlayers,
+          current.current_player_name,
+          current.small_blind_value,
+          current.big_blind_value,
+          current.small_blind_player_name,
+          current.big_blind_player_name,
         ),
       );
     });
@@ -104,7 +130,12 @@ export class TableService {
         response.host_name,
         response.table_cards,
         response.pot,
-        response.players
+        response.players,
+        response.current_player_name,
+        response.small_blind_value,
+        response.big_blind_value,
+        response.small_blind_player_name,
+        response.big_blind_player_name,
       );
       this.currentTable$.set(table);
     }
@@ -115,14 +146,20 @@ export class TableService {
 
   async listTables(): Promise<void> {
     const response = await this.socket?.emitWithAck('list_tables');
-    const tables: Table[] = response.tables.map((t: any) =>
-      new Table(
-        t.table_id,
-        t.host_name,
-        t.table_cards,
-        t.pot,
-        t.players
-      )
+    const tables: Table[] = response.tables.map(
+      (t: any) =>
+        new Table(
+          t.table_id,
+          t.host_name,
+          t.table_cards,
+          t.pot,
+          t.players,
+          t.current_player_name,
+          t.small_blind_value,
+          t.big_blind_value,
+          t.small_blind_player_name,
+          t.big_blind_player_name,
+        ),
     );
     this.tableList$.set(tables);
   }
@@ -130,14 +167,18 @@ export class TableService {
   async createTable(): Promise<void> {
     const response = await this.socket?.emitWithAck('create_table');
     console.log('createTable response:', response);
-    const table: Table =  
-      new Table(
-        response.table_id,
-        response.host_name,
-        response.table_cards,
-        response.pot,
-        response.players
-      );
+    const table: Table = new Table(
+      response.table_id,
+      response.host_name,
+      response.table_cards,
+      response.pot,
+      response.players,
+      response.current_player_name,
+      response.small_blind_value,
+      response.big_blind_value,
+      response.small_blind_player_name,
+      response.big_blind_player_name,
+    );
     this.currentTable$.set(table);
   }
 
