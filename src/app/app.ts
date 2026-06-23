@@ -11,6 +11,7 @@ import { TableService } from './services/TableService';
 export class App {
   protected readonly title = signal('technopoker');
   username = computed(() => this.tableService.username$());
+  connected = computed(() => this.tableService.connected());
 
   constructor(private tableService: TableService) {}
 }

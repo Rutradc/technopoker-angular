@@ -1,7 +1,7 @@
 <div class="menu-container">
   <h1 class="title">TechnoPoker</h1>
 
-  @if(!confirmedUsername){
+  @if(!connected()) {
     <form [formGroup]="form" class="username-box">
   
       <input
@@ -23,14 +23,20 @@
     </form>
   }
   @else {
-    <p class="current-user">
-      Joueur connecté : <strong>{{ username() }}</strong>
-    </p>
+    <div class="user-row">
+      <div class="current-user">
+        Joueur connecté : <strong>{{ username() }}</strong>
+      </div>
+
+      <button class="btn confirm edit-btn" (click)="editUsername()">
+        Modifier
+      </button>
+    </div>
   }
 
 
   <div class="menu">
-    <button class="btn primary" [disabled]="!confirmedUsername" (click)="createGame()">Créer une partie</button>
-    <button class="btn secondary" [disabled]="!confirmedUsername" (click)="joinGame()">Rejoindre une partie</button>
+    <button class="btn primary" [disabled]="!connected()" (click)="createGame()">Créer une partie</button>
+    <button class="btn secondary" [disabled]="!connected()" (click)="joinGame()">Rejoindre une partie</button>
   </div>
 </div>

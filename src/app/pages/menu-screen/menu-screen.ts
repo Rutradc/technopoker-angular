@@ -12,15 +12,17 @@ import { TableService } from '../../services/TableService';
 export class MenuScreen {
   form: FormGroup;
   username = computed(() => this.tableService.username$());
-  confirmedUsername = false;
+  connected = computed(() => this.tableService.connected());
 
   constructor(private fb: FormBuilder, private router: Router, private tableService: TableService) {
     this.form = this.fb.group({
       username: [this.username() ? this.username() : '', [Validators.required, Validators.minLength(2)]]
     });
+  }
 
-    if (!this.tableService.connected()) {
-      this.tableService.disconnect();
+  ngOnInit(): void {
+    if (this.username()) {
+      this.tableService.connect();
     }
   }
 
@@ -31,8 +33,16 @@ export class MenuScreen {
 
     this.tableService.username$.set(value);
     localStorage.setItem('username', value);
-    this.confirmedUsername = true;
     this.tableService.connect();
+  }
+
+  editUsername() {
+    this.tableService.disconnect();
+
+    // remettre valeur actuelle dans le form
+    this.form.patchValue({
+      username: this.username()
+    });
   }
 
   async createGame() {

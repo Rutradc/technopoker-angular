@@ -1,5 +1,5 @@
 <div class="main-background">
-  @if (username() != '') {
+  @if (connected()) {
     <div class="global-player-hud">
       Connecté en tant que : <span class="username">{{ username() }}</span>
     </div>
