@@ -12,6 +12,7 @@ export class TableService {
   // signal qui stocke la liste de parties en attente
   tableList$ = signal<Table[]>([]);
   currentTable$ = signal<Table | null>(null);
+  username$ = signal<string>(localStorage.getItem('username') || '');
 
   // état de connexion
   private _connected = signal(false);

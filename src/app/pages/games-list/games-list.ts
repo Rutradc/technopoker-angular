@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, computed, signal } from '@angular/core';
 import { Table } from '../../models/tableModel';
 import { Router } from '@angular/router';
 import { TableService } from '../../services/TableService';
@@ -11,13 +11,14 @@ import { TableService } from '../../services/TableService';
 })
 export class GamesList {
   tables$ = signal<Table[]>([]);
+  username = computed(() => this.tableService.username$());
 
   constructor(private router: Router, public tableService: TableService) {
     this.tables$ = this.tableService.tableList$;
   }
 
   ngOnInit(): void {
-    if (localStorage.getItem('username') === null) {
+    if (this.username() === null) {
       this.router.navigate(['']);
     }
     if (!this.tableService.connected()) {

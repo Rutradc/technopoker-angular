@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, computed } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { TableService } from '../../services/TableService';
@@ -11,14 +11,12 @@ import { TableService } from '../../services/TableService';
 })
 export class MenuScreen {
   form: FormGroup;
-  username: string = '';
+  username = computed(() => this.tableService.username$());
   confirmedUsername = false;
 
   constructor(private fb: FormBuilder, private router: Router, private tableService: TableService) {
-    const saved = localStorage.getItem('username');
-
     this.form = this.fb.group({
-      username: [saved ? saved : '', [Validators.required, Validators.minLength(2)]]
+      username: [this.username() ? this.username() : '', [Validators.required, Validators.minLength(2)]]
     });
 
     if (!this.tableService.connected()) {
@@ -31,7 +29,7 @@ export class MenuScreen {
 
     const value = this.form.value.username.trim();
 
-    this.username = value;
+    this.tableService.username$.set(value);
     localStorage.setItem('username', value);
     this.confirmedUsername = true;
     this.tableService.connect();

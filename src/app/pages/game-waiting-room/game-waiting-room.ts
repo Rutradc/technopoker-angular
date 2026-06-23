@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, computed, signal } from '@angular/core';
 import { Table } from '../../models/tableModel';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TableService } from '../../services/TableService';
@@ -13,14 +13,14 @@ export class GameWaitingRoom {
   tableId!: number;
 
   table$ = signal<Table | null>(null);
-  username: string = localStorage.getItem('username') || '';
+  username = computed(() => this.tableService.username$());
 
   constructor(private route: ActivatedRoute, private router: Router, private tableService: TableService) {
     this.table$ = this.tableService.currentTable$;
   }
 
   async ngOnInit(): Promise<void> {
-    if (localStorage.getItem('username') === null) {
+    if (this.username() === null) {
       this.router.navigate(['']);
     }
     if (!this.tableService.connected()) {

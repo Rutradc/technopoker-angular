@@ -33,7 +33,7 @@
           @for (player of table$()!.players; track player) {
             <li>
                 {{ player.player_name }}
-                @if (player.player_name === username) {
+                @if (player.player_name === username()) {
                     <span class="me-badge">vous</span>
                 }
             </li>
@@ -45,7 +45,7 @@
 
     <p class="status">En attente d'autres joueurs...</p>
 
-    @if (table$()!.host_name == username) {
+    @if (table$()!.host_name == username()) {
       <p class="host-message">
         Vous êtes l'hôte de cette table. Vous pouvez lancer la partie lorsque tous les joueurs sont prêts.
       </p>
@@ -55,7 +55,7 @@
             Quitter la table
         </button>
 
-        @if (table$()!.host_name == username) {
+        @if (table$()!.host_name == username()) {
             <button class="btn start" (click)="startGame()">
             Lancer la partie
             </button>
