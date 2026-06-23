@@ -7,9 +7,9 @@ export class Table {
   table_cards: CardModel[];
   pot: number;
   players: Player[];
+  small_blind_value: number;
+  big_blind_value: number;
   current_player_name: string | null;
-  small_blind_value: number | null;
-  big_blind_value: number | null;
   small_blind_player_name: string | null;
   big_blind_player_name: string | null;
 
