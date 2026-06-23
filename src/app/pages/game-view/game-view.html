@@ -8,19 +8,19 @@
   }
   <!-- 💰 POT -->
   <div class="pot">
-    Pot : {{ pot }} jetons
+    Pot : {{ pot$() }} jetons
   </div>
 
   <!-- 🃏 CARTES COMMUNES -->
   <div class="community-cards">
-    @for(card of communityCards; track $index){
+    @for(card of communityCards$(); track $index){
         <app-card [card]="card"></app-card>
     }
   </div>
 
   <!-- 🎴 MAIN JOUEUR -->
   <div class="player-hand">
-    @for(card of playerHand; track $index){
+    @for(card of playerHand$(); track $index){
         <app-card [card]="card"></app-card>
     }
   </div>
@@ -33,7 +33,7 @@
 
     <form [formGroup]="raiseForm" class="raise-box">
           <input
-            type="number"  
+            type="number"
             step=5
             min=5
             formControlName="raiseAmount"

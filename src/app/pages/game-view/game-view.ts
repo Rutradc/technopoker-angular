@@ -1,7 +1,8 @@
-import { ChangeDetectorRef, Component } from '@angular/core';
+import { ChangeDetectorRef, Component, computed, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CardModel } from '../../models/cardModel';
-import { Card } from "../../composants/card/card";
+import { Card } from '../../composants/card/card';
+import { TableService } from '../../services/TableService';
 
 @Component({
   selector: 'app-game-view',
@@ -10,34 +11,45 @@ import { Card } from "../../composants/card/card";
   styleUrl: './game-view.css',
 })
 export class GameView {
+  tableService = inject(TableService);
+  table$ = this.tableService.currentTable$;
+
   raiseForm: FormGroup;
   raiseAmount = 10;
 
-  pot = 120;
+  pot$ = computed(() => {
+    const table = this.table$();
+    return table ? table.pot : 0;
+  });
+
   showTurnMessage = false;
 
-  communityCards = [
-    new CardModel('A', 'hearts'), 
-    new CardModel('K', 'spades'), 
-    new CardModel('Q', 'diamonds')
-  ]; // exemple
+  communityCards$ = computed(() => {
+    const table = this.table$();
+    return table ? table.table_cards : [];
+  });
 
-
-  playerHand = [
-    new CardModel('J', 'clubs'), 
-    new CardModel('10', 'hearts')
-  ];
-
+  playerHand$ = computed(() => {
+    const table = this.table$();
+    if (!table) return [];
+    const currentPlayer = table.players.find(
+      (p) => p.player_name === localStorage.getItem('username'),
+    );
+    return currentPlayer ? currentPlayer.hand : [];
+  });
 
   players = [
     { username: 'Alice', chips: 500, bet: 20, inRound: true, isTurn: false },
     { username: 'Bob', chips: 320, bet: 40, inRound: true, isTurn: true },
-    { username: 'Charlie', chips: 150, bet: 0, inRound: false, isTurn: false }
+    { username: 'Charlie', chips: 150, bet: 0, inRound: false, isTurn: false },
   ];
 
-  constructor(private fb: FormBuilder, private cdr: ChangeDetectorRef) {
+  constructor(
+    private fb: FormBuilder,
+    private cdr: ChangeDetectorRef,
+  ) {
     this.raiseForm = this.fb.group({
-      raiseAmount: [this.raiseAmount, [Validators.required, Validators.min(5)]]
+      raiseAmount: [this.raiseAmount, [Validators.required, Validators.min(5)]],
     });
   }
 
