@@ -69,3 +69,51 @@
 .center {
   font-size: 48px;
 }
+
+/* ============================= */
+/* FACE DOWN CARD */
+/* ============================= */
+
+.card.facedown {
+  color: transparent; /* cache texte */
+  text-shadow: none;
+}
+
+/* on cache le contenu interne */
+.card.facedown .corner,
+.card.facedown .center {
+  opacity: 0;
+}
+
+.card.facedown.simple {
+  background:
+    repeating-linear-gradient(
+      45deg,
+      #8b0000,   /* rouge foncé */
+      #8b0000 10px,
+      #b71c1c 10px,
+      #b71c1c 20px
+    );
+
+  border: 2px solid rgba(255,255,255,0.25);
+
+  box-shadow:
+    0 6px 12px rgba(0,0,0,0.3),
+    inset 0 0 10px rgba(255,255,255,0.08);
+}
+
+.card.facedown.classic {
+  background:
+    radial-gradient(circle at center, #b71c1c 30%, #5a0000 100%);
+
+  border: 2px solid rgba(255,255,255,0.2);
+  position: relative;
+}
+
+.card.facedown.classic::before {
+  content: "";
+  position: absolute;
+  inset: 6px;
+  border: 2px solid rgba(255,255,255,0.25);
+  border-radius: 8px;
+}
