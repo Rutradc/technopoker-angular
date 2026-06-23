@@ -9,20 +9,24 @@ import { CardModel } from '../../models/cardModel';
 })
 export class Card {
   @Input() card: CardModel | undefined;
-  @Input() value: number = 0;
-  @Input() suit: string = '';
-  @Input() size: string = 'm';
+  @Input() size : string = 'm';
+  @Input() isFaceDown : boolean = false;
+  @Input() faceDownStyle : string = 'classic';
   suitIcon: string = '';
   valueShowed: string = '';
   @HostBinding('style.--color') color = '#d40000';
   @HostBinding('style.--size') sizeClass = 'm';
 
   ngOnInit(): void {
-    if (!this.card) {
-      this.card = new CardModel(this.value, this.suit);
-    }
+    this.sizeClass = this.size;
 
-    switch (this.card.suit) {
+    if (!this.isFaceDown) {
+      this.buildCard();
+    }
+  }
+
+  private buildCard() {
+    switch (this.card!.suit) {
       case 'hearts':
         this.suitIcon = '♥';
         break;
@@ -36,35 +40,15 @@ export class Card {
       case 'spades':
         this.suitIcon = '♠';
         this.color = '#000000';
+        break;
     }
 
-    switch (this.card.rank) {
-      case 13:
-        this.valueShowed = 'K';
-        break;
-      case 12:
-        this.valueShowed = 'Q';
-        break;
-      case 11:
-        this.valueShowed = 'J';
-        break;
-      case 14:
-        this.valueShowed = 'A';
-        break;
-      default:
-        this.valueShowed = this.card.rank.toString();
-    }
-
-    switch (this.size) {
-      case 's':
-        this.sizeClass = 's';
-        break;
-      case 'm':
-        this.sizeClass = 'm';
-        break;
-      case 'l':
-        this.sizeClass = 'l';
-        break;
+    switch (this.card!.value) {
+      case 'king': this.valueShowed = 'K'; break;
+      case 'queen': this.valueShowed = 'Q'; break;
+      case 'jack': this.valueShowed = 'J'; break;
+      case 'ace': this.valueShowed = 'A'; break;
+      default: this.valueShowed = this.card!.value;
     }
   }
 }
