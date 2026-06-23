@@ -147,3 +147,33 @@ tr:not(:last-child) {
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
+
+/* zone boutons */
+.actions {
+  margin-top: 25px;
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+}
+
+/* bouton quitter */
+.leave {
+  margin-top: 25px; /* comme .start */
+  padding: 14px 30px; /* même padding */
+  font-size: 18px; /* même taille de texte */
+
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+
+  background: linear-gradient(135deg, #ef5350, #c62828);
+  color: white;
+
+  box-shadow: 0 6px 15px rgba(0,0,0,0.4);
+  transition: 0.2s;
+}
+
+.leave:hover {
+  transform: translateY(-2px) scale(1.05);
+}

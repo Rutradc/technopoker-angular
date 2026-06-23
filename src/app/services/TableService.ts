@@ -81,6 +81,7 @@ export class TableService {
     }
     else
       this.currentTable$.set(null);
+    console.log('currentTable$ after joinTable:', this.currentTable$());
   }
 
   async listTables(): Promise<void> {
@@ -115,7 +116,9 @@ export class TableService {
     this.tableList$.set([]);
   }
 
-  leaveTable(): void {
+  async leaveTable(): Promise<void> {
+    const response = await this.socket?.emitWithAck('quit_table');
+    console.log('leaveTable response:', response);
     this.currentTable$.set(null);
   }
 

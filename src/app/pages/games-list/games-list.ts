@@ -12,7 +12,9 @@ import { TableService } from '../../services/TableService';
 export class GamesList {
   tables$ = signal<Table[]>([]);
 
-  constructor(private router: Router, public tableService: TableService) {}
+  constructor(private router: Router, public tableService: TableService) {
+    this.tables$ = this.tableService.tableList$;
+  }
 
   ngOnInit(): void {
     if (localStorage.getItem('username') === null) {
@@ -23,7 +25,6 @@ export class GamesList {
     }
 
     this.tableService.listTables();
-    this.tables$ = this.tableService.tableList$;
   }
 
   joinTable(table: Table) {

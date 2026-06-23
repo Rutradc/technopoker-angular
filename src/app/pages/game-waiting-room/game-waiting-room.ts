@@ -15,7 +15,9 @@ export class GameWaitingRoom {
   table$ = signal<Table | null>(null);
   username: string = localStorage.getItem('username') || '';
 
-  constructor(private route: ActivatedRoute, private router: Router, private tableService: TableService) {}
+  constructor(private route: ActivatedRoute, private router: Router, private tableService: TableService) {
+    this.table$ = this.tableService.currentTable$;
+  }
 
   async ngOnInit(): Promise<void> {
     if (localStorage.getItem('username') === null) {
@@ -26,7 +28,7 @@ export class GameWaitingRoom {
       await this.tableService.joinTable(Number(this.route.snapshot.paramMap.get('id')));
       if (!this.tableService.currentTable$()) {
         this.router.navigate(['/tables']);
-        alert('La table est introuvable ou pleine.');
+        alert('La table est introuvable ou pleine ou votre pseudo est déjà utilisé dans cette table.');
       } // TODO: gérer le cas où la table n'existe pas ou est pleine
     }
 
@@ -34,18 +36,18 @@ export class GameWaitingRoom {
       this.tableService.joinTable(Number(this.route.snapshot.paramMap.get('id')));
     }
     // this.tableId = Number(this.route.snapshot.paramMap.get('id'));
-
-    this.table$ = this.tableService.currentTable$;
-    // ⚠️ simulation (plus tard → API backend)
-    // this.table = {
-    //   id: this.tableId,
-    //   num_players: 3,
-    //   host_name: 'Alice'
-    // };
   }
 
   startGame() {
     console.log('Démarrage de la partie pour la table', this.table$()?.table_id);
     this.router.navigate(['/game', this.table$()?.table_id]);
+  }
+
+  leaveTable() {
+    if (confirm("Quitter la table ?")){
+      console.log('Quitter la table', this.table$()?.table_id);
+      this.tableService.leaveTable();
+      this.router.navigate(['']);
+    }
   }
 }

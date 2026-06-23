@@ -49,11 +49,18 @@
       <p class="host-message">
         Vous êtes l'hôte de cette table. Vous pouvez lancer la partie lorsque tous les joueurs sont prêts.
       </p>
-
-      <button class="btn start" (click)="startGame()">
-        Lancer la partie
-      </button>
     }
+    <div class="actions">
+        <button class="btn leave" (click)="leaveTable()">
+            Quitter la table
+        </button>
+
+        @if (table$()!.host_name == username) {
+            <button class="btn start" (click)="startGame()">
+            Lancer la partie
+            </button>
+        }
+    </div>
 
   </div>
 }
