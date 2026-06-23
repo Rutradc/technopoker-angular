@@ -20,8 +20,8 @@ export class Table {
     pot: number,
     players: Player[],
     current_player_name: string | null,
-    small_blind_value: number | null,
-    big_blind_value: number | null,
+    small_blind_value: number,
+    big_blind_value: number,
     small_blind_player_name: string | null,
     big_blind_player_name: string | null,
   ) {
