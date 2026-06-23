@@ -45,15 +45,15 @@
 
   <!-- 👤 JOUEURS -->
   <div class="players">
-    @for(p of players; track $index){
+    @for(p of players$(); track $index){
         <div
           class="player"
-          [class.active]="p.isTurn"
-          [class.folded]="!p.inRound"
+          [class.active]="p.player_name === currentPlayerName$()"
+          [class.folded]="!p.is_folded"
         >
-          <div class="name">{{ p.username }}</div>
+          <div class="name">{{ p.player_name }}</div>
           <div>💰 {{ p.chips }}</div>
-          <div>Mise : {{ p.bet }}</div>
+          <div>Mise : {{ p.current_bet }}</div>
         </div>
     }
   </div>

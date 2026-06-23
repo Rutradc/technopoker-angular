@@ -38,11 +38,15 @@ export class GameView {
     return currentPlayer ? currentPlayer.hand : [];
   });
 
-  players = [
-    { username: 'Alice', chips: 500, bet: 20, inRound: true, isTurn: false },
-    { username: 'Bob', chips: 320, bet: 40, inRound: true, isTurn: true },
-    { username: 'Charlie', chips: 150, bet: 0, inRound: false, isTurn: false },
-  ];
+  players$ = computed(() => {
+    const table = this.table$();
+    return table ? table.players : [];
+  });
+
+  currentPlayerName$ = computed(() => {
+    const table = this.table$();
+    return table ? table.current_player_name : null;
+  });
 
   constructor(
     private fb: FormBuilder,
