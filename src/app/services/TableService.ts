@@ -145,8 +145,8 @@ export class TableService {
     this.tableList$.set([]);
   }
 
-  async leaveTable(): Promise<void> {
-    const response = await this.socket?.emitWithAck('quit_table');
+  async leaveTable(tableId: number): Promise<void> {
+    const response = await this.socket?.emitWithAck('quit_table', { table_id: tableId });
     console.log('leaveTable response:', response);
     this.currentTable$.set(null);
   }

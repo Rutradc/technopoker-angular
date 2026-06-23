@@ -43,10 +43,10 @@ export class GameWaitingRoom {
     this.router.navigate(['/game', this.table$()?.table_id]);
   }
 
-  leaveTable() {
+  async leaveTable() {
     if (confirm("Quitter la table ?")){
       console.log('Quitter la table', this.table$()?.table_id);
-      this.tableService.leaveTable();
+      await this.tableService.leaveTable(this.table$()?.table_id!);
       this.router.navigate(['']);
     }
   }
