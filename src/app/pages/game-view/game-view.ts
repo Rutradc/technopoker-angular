@@ -35,7 +35,7 @@ export class GameView {
     const table = this.table$();
     if (!table) return [];
     const currentPlayer = table.players.find(
-      (p) => p.player_name === localStorage.getItem('username'),
+      (p) => p.player_name === this.tableService.username$(),
     );
     return currentPlayer ? currentPlayer.hand : [];
   });

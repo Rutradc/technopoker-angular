@@ -23,7 +23,7 @@ export class TableService {
 
   connect(): void {
     this.socket = io('localhost:4587', {
-        auth: { 'username': localStorage.getItem('username') },
+        auth: { 'username': this.username$() },
         transports: ['websocket'],
         reconnection: true
     });
@@ -111,7 +111,7 @@ export class TableService {
       if (!current) return;
 
       const updatedPlayers = current.players.map((p) =>
-        p.player_name === localStorage.getItem('username') ? { ...p, hand: data.hand } : p,
+        p.player_name === this.username$() ? { ...p, hand: data.hand } : p,
       );
       this.currentTable$.set(
         new Table(
