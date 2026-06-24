@@ -9,9 +9,9 @@ import { CardModel } from '../../models/cardModel';
 })
 export class Card {
   @Input() card: CardModel | undefined;
-  @Input() size : string = 'm';
-  @Input() isFaceDown : boolean = false;
-  @Input() faceDownStyle : string = 'classic';
+  @Input() size: string = 'm';
+  @Input() isFaceDown: boolean = false;
+  @Input() faceDownStyle: string = 'classic';
   suitIcon: string = '';
   valueShowed: string = '';
   @HostBinding('style.--color') color = '#d40000';
@@ -43,12 +43,22 @@ export class Card {
         break;
     }
 
-    switch (this.card!.value) {
-      case 'king': this.valueShowed = 'K'; break;
-      case 'queen': this.valueShowed = 'Q'; break;
-      case 'jack': this.valueShowed = 'J'; break;
-      case 'ace': this.valueShowed = 'A'; break;
-      default: this.valueShowed = this.card!.value;
+    switch (this.card!.rank) {
+      case 14:
+        this.valueShowed = 'A';
+        break;
+      case 13:
+        this.valueShowed = 'K';
+        break;
+      case 12:
+        this.valueShowed = 'Q';
+        break;
+      case 11:
+        this.valueShowed = 'J';
+        break;
+      default:
+        this.valueShowed = this.card!.rank.toString();
+        break;
     }
   }
 }
