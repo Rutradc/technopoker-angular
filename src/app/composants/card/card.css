@@ -30,6 +30,7 @@
 
 .card:hover {
   transform: translateY(calc(-5px * var(--scale)));
+  z-index: 10;
 }
 
 .card.s:hover {

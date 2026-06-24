@@ -87,19 +87,73 @@
 
 .players {
   position: absolute;
-  right: 20px;
+  left: 20px;
   top: 80px;
+
   display: flex;
   flex-direction: column;
   gap: 10px;
+
+  max-height: calc(100vh - 120px); /* 👈 limite écran */
+  overflow-y: auto;
+
+  padding-right: 5px; /* espace pour scrollbar */
+  min-width: 260px;
+  .player:first-child{
+    margin-top: 20px;
+  }
+}
+
+.players::-webkit-scrollbar {
+  width: 6px;
+}
+
+.players::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.3);
+  border-radius: 4px;
+}
+
+.players::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.player-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.player {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 10px;
+  padding: 10px 14px;
+
+  background: rgba(0, 0, 0, 0.25);
+  border-radius: 10px;
+
+  min-width: 220px;
+}
+
+.player-cards {
+  display: flex;
+  gap: 6px;
 }
 
 .player.active {
   border: 2px solid #ffd54f;
+  box-shadow: 0 0 10px rgba(255, 213, 79, 0.5);
 }
 
 .player.folded {
-  opacity: 0.5;
+  opacity: 0.4;
+}
+
+.player.out {
+  opacity: 0.4;
+  filter: grayscale(0.7);
 }
 
 /* overlay plein écran */
