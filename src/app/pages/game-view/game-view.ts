@@ -70,17 +70,17 @@ export class GameView {
   }
 
   fold() {
-    console.log('Fold');
+    this.tableService.fold(this.table$()?.table_id!);
   }
 
   call() {
-    console.log('Call');
+    this.tableService.call(this.table$()?.table_id!);
   }
 
   raise() {
     const value = this.raiseForm.value.raiseAmount;
     this.raiseAmount = value;
-    console.log('Raise:', this.raiseAmount);
+    this.tableService.raise(this.table$()?.table_id!, value);
   }
 
   showTurnNotification() {
