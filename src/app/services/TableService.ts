@@ -16,6 +16,7 @@ export class TableService {
   tableList$ = signal<Table[]>([]);
   currentTable$ = signal<Table | null>(null);
   username$ = signal<string>(localStorage.getItem('username') || '');
+  token$ = signal<string | null>(localStorage.getItem('token') || null);
 
   // état de connexion
   private _connected = signal(false);
@@ -23,7 +24,7 @@ export class TableService {
 
   connect(): void {
     this.socket = io('localhost:4587', {
-        auth: { 'username': this.username$() },
+        auth: { 'username': this.username$() , 'token': this.token$()},
         transports: ['websocket'],
         reconnection: true
     });
@@ -37,6 +38,11 @@ export class TableService {
     });
 
     // écoute des messages
+
+    this.socket.on('auth_token', (data: any) => {
+      localStorage.setItem('token', data.token)
+      this.token$.set(data.token)
+    })
 
     this.socket.on('error', (err: any) => {
       console.error('Socket error:', err);
