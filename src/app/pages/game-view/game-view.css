@@ -194,6 +194,57 @@
   animation: popIn 0.4s ease, fadeOut 0.4s ease 1.2s forwards;
 }
 
+.dealer-deck {
+  position: absolute;
+  right: 30px;
+  bottom: 250px; /* juste au-dessus des boutons */
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.deck-card {
+  position: relative;
+}
+
+/* effet pile de cartes */
+.deck-card::before,
+.deck-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 12px;
+  z-index: -1;
+}
+
+/* carte derrière 1 */
+.deck-card::before {
+  transform: translate(4px, 4px);
+  background: inherit;
+  opacity: 0.8;
+}
+
+/* carte derrière 2 */
+.deck-card::after {
+  transform: translate(8px, 8px);
+  background: inherit;
+  opacity: 0.6;
+}
+
+.dealer-deck:hover {
+  transform: translateY(-5px);
+  cursor: pointer;
+}
+
+.deck-card {
+  transition: transform 0.4s ease;
+}
+
+.dealer-deck {
+  filter: drop-shadow(0 0 8px rgba(255,255,255,0.2));
+}
+
 /* animation entrée */
 @keyframes popIn {
   from {

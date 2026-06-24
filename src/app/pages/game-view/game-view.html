@@ -25,6 +25,14 @@
     }
   </div>
 
+  <div class="dealer-deck">
+    <app-card 
+      [isFaceDown]="true" 
+      [size]="'m'"
+      class="deck-card classic"
+    ></app-card>
+  </div>
+
   <!-- 🎮 ACTIONS -->
   <div class="actions">
     <button class="btn fold" (click)="fold()">Fold</button>
