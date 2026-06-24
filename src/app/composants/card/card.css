@@ -1,9 +1,9 @@
 .card {
-  width: 120px;
-  height: 180px;
-  border-radius: 12px;
+  width: calc(120px * var(--scale));
+  height: calc(180px * var(--scale));
+  border-radius: calc(12px * var(--scale));
   background: white;
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 calc(6px * var(--scale)) calc(12px * var(--scale)) rgba(0, 0, 0, 0.2);
   position: relative;
   font-family: 'Segoe UI', sans-serif;
   color: var(--color); /* rouge pour carreau */
@@ -14,7 +14,6 @@
 
 .card {
   --scale: 1;
-  transform: scale(var(--scale));
 }
 
 .card.s {
@@ -30,11 +29,11 @@
 }
 
 .card:hover {
-  transform: scale(var(--scale)) translateY(calc(-5px * var(--scale)));
+  transform: translateY(calc(-5px * var(--scale)));
 }
 
 .card.s:hover {
-  transform: scale(0.7) translateY(calc(-5px * 0.7));
+  transform: scale(1.5) translateY(calc(-5px * 0.7));
 }
 
 /* Coins */
@@ -47,27 +46,27 @@
 }
 
 .top-left {
-  top: 8px;
-  left: 8px;
+  top: calc(8px * var(--scale));
+  left: calc(8px * var(--scale));
 }
 
 .bottom-right {
-  bottom: 8px;
-  right: 8px;
+  bottom: calc(8px * var(--scale));
+  right: calc(8px * var(--scale));
   transform: rotate(180deg);
 }
 
 .value {
-  font-size: 18px;
+  font-size: calc(18px * var(--scale));
 }
 
 .suit {
-  font-size: 16px;
+  font-size: calc(16px * var(--scale));
 }
 
 /* Centre */
 .center {
-  font-size: 48px;
+  font-size: calc(48px * var(--scale));
 }
 
 /* ============================= */
@@ -90,16 +89,16 @@
     repeating-linear-gradient(
       45deg,
       #8b0000,   /* rouge foncé */
-      #8b0000 10px,
-      #b71c1c 10px,
-      #b71c1c 20px
+      #8b0000 calc(10px * var(--scale)),
+      #b71c1c calc(10px * var(--scale)),
+      #b71c1c calc(20px * var(--scale))
     );
 
   border: 2px solid rgba(255,255,255,0.25);
 
   box-shadow:
-    0 6px 12px rgba(0,0,0,0.3),
-    inset 0 0 10px rgba(255,255,255,0.08);
+    0 calc(6px * var(--scale)) calc(12px * var(--scale)) rgba(0,0,0,0.3),
+    inset 0 0 calc(10px * var(--scale)) rgba(255,255,255,0.08);
 }
 
 .card.facedown.classic {
@@ -113,7 +112,7 @@
 .card.facedown.classic::before {
   content: "";
   position: absolute;
-  inset: 6px;
+  inset: calc(6px * var(--scale));
   border: 2px solid rgba(255,255,255,0.25);
-  border-radius: 8px;
+  border-radius: calc(8px * var(--scale));
 }
