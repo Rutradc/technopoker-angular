@@ -34,6 +34,11 @@ export class TableService {
     });
 
     // écoute des messages
+
+    this.socket.on('error', (err: any) => {
+      console.error('Socket error:', err);
+    });
+
     this.socket.on('joined_table', (data: any) => {
       const current = this.currentTable$();
       console.log('joined_table event received:', data);
