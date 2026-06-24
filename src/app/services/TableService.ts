@@ -125,7 +125,6 @@ export class TableService {
 
       this.socket.on('cards_dealt', (data: any) => {
         const current = this.currentTable$();
-        console.log('cards_dealt event received:', data);
         if (!current) return;
 
         const updatedPlayers = current.players.map((p) =>
@@ -149,7 +148,6 @@ export class TableService {
 
       this.socket.on('player_action', (data: any) => {
         const current = this.currentTable$();
-        console.log('player_action event received:', data);
         if (!current) return;
 
         const table_data = data.table;
