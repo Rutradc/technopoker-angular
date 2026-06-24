@@ -15,7 +15,11 @@ export class GameWaitingRoom {
   table$ = signal<Table | null>(null);
   username = computed(() => this.tableService.username$());
 
-  constructor(private route: ActivatedRoute, private router: Router, private tableService: TableService) {
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router,
+    private tableService: TableService,
+  ) {
     this.table$ = this.tableService.currentTable$;
   }
 
@@ -23,19 +27,13 @@ export class GameWaitingRoom {
     if (this.username() === null) {
       this.router.navigate(['']);
     }
-    if (!this.tableService.connected()) {
-      this.tableService.connect();
-      await this.tableService.joinTable(Number(this.route.snapshot.paramMap.get('id')));
-      if (!this.tableService.currentTable$()) {
-        this.router.navigate(['/tables']);
-        alert('La table est introuvable ou pleine ou votre pseudo est déjà utilisé dans cette table.');
-      } // TODO: gérer le cas où la table n'existe pas ou est pleine
-    }
-
+    await this.tableService.joinTable(Number(this.route.snapshot.paramMap.get('id')));
     if (!this.tableService.currentTable$()) {
-      this.tableService.joinTable(Number(this.route.snapshot.paramMap.get('id')));
-    }
-    // this.tableId = Number(this.route.snapshot.paramMap.get('id'));
+      this.router.navigate(['/tables']);
+      alert(
+        'La table est introuvable ou pleine ou votre pseudo est déjà utilisé dans cette table.',
+      );
+    } // TODO: gérer le cas où la table n'existe pas ou est pleine
   }
 
   startGame() {
@@ -44,7 +42,7 @@ export class GameWaitingRoom {
   }
 
   async leaveTable() {
-    if (confirm("Quitter la table ?")){
+    if (confirm('Quitter la table ?')) {
       console.log('Quitter la table', this.table$()?.table_id);
       await this.tableService.leaveTable(this.table$()?.table_id!);
       this.router.navigate(['']);

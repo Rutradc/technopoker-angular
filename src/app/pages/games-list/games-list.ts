@@ -13,7 +13,10 @@ export class GamesList {
   tables$ = signal<Table[]>([]);
   username = computed(() => this.tableService.username$());
 
-  constructor(private router: Router, public tableService: TableService) {
+  constructor(
+    private router: Router,
+    public tableService: TableService,
+  ) {
     this.tables$ = this.tableService.tableList$;
   }
 
@@ -21,10 +24,6 @@ export class GamesList {
     if (this.username() === null) {
       this.router.navigate(['']);
     }
-    if (!this.tableService.connected()) {
-      this.tableService.connect();
-    }
-
     this.tableService.listTables();
   }
 
