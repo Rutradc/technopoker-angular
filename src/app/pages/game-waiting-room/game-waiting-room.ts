@@ -40,7 +40,7 @@ export class GameWaitingRoom {
 
   startGame() {
     console.log('Démarrage de la partie pour la table', this.table$()?.table_id);
-    this.router.navigate(['/game', this.table$()?.table_id]);
+    this.tableService.startGame(this.table$()?.table_id!);
   }
 
   async leaveTable() {

@@ -1,6 +1,7 @@
-import { Injectable, signal, computed } from '@angular/core';
+import { Injectable, signal, computed, inject } from '@angular/core';
 import { io, Socket } from 'socket.io-client';
 import { Table } from '../models/tableModel';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -8,6 +9,8 @@ import { Table } from '../models/tableModel';
 export class TableService {
 
   private socket!: Socket;
+
+  private router = inject(Router);
 
   // signal qui stocke la liste de parties en attente
   tableList$ = signal<Table[]>([]);
@@ -99,6 +102,7 @@ export class TableService {
           data.big_blind_player_name,
         ),
       );
+      this.router.navigate(['/game', current.table_id]);
     });
 
     this.socket.on('cards_dealt', (data: any) => {
@@ -201,5 +205,9 @@ export class TableService {
   disconnect(): void {
     this.socket?.disconnect();
     this._connected.set(false);
+  }
+}
+  async startGame(tableId: number): Promise<void> {
+    this.socket?.emit('start_game', { table_id: tableId });
   }
 }
