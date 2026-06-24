@@ -59,8 +59,11 @@ export class GameView {
     });
   }
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     // simulation d'un tour de jeu
+    if (!this.table$()){
+      await this.tableService.joinTable(Number(this.route.snapshot.paramMap.get('id')));
+    }
     this.showTurnNotification();
   }
 
