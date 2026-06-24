@@ -228,6 +228,7 @@ export class TableService {
     this.socket?.disconnect();
     this._connected.set(false);
   }
+
   async startGame(tableId: number): Promise<void> {
     this.socket?.emit('start_game', { table_id: tableId });
   }
