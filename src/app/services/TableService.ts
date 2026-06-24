@@ -232,4 +232,16 @@ export class TableService {
   async startGame(tableId: number): Promise<void> {
     this.socket?.emit('start_game', { table_id: tableId });
   }
+
+  async call(tableId: number): Promise<void> {
+    this.socket?.emit('call', { table_id: tableId });
+  }
+
+  async fold(tableId: number): Promise<void> {
+    this.socket?.emit('fold', { table_id: tableId });
+  }
+
+  async raise(tableId: number, amount: number): Promise<void> {
+    this.socket?.emit('raise', { table_id: tableId, amount });
+  }
 }
