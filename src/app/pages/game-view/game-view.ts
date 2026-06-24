@@ -5,6 +5,7 @@ import { Card } from '../../composants/card/card';
 import { TableService } from '../../services/TableService';
 import { Table } from '../../models/tableModel';
 import { Player } from '../../models/playerModel';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-game-view',
@@ -53,6 +54,7 @@ export class GameView {
   constructor(
     private fb: FormBuilder,
     private cdr: ChangeDetectorRef,
+    private route: ActivatedRoute,
   ) {
     this.raiseForm = this.fb.group({
       raiseAmount: [this.raiseAmount, [Validators.required, Validators.min(5)]],
@@ -61,7 +63,7 @@ export class GameView {
 
   async ngOnInit(): Promise<void> {
     // simulation d'un tour de jeu
-    if (!this.table$()){
+    if (!this.table$()) {
       await this.tableService.joinTable(Number(this.route.snapshot.paramMap.get('id')));
     }
     this.showTurnNotification();
