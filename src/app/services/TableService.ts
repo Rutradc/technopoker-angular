@@ -174,6 +174,7 @@ export class TableService {
   }
 
   async listTables(): Promise<void> {
+    await this.ensureConnected();
     const response = await this.socket?.emitWithAck('list_tables');
     const tables: Table[] = response.tables.map(
       (t: any) =>
@@ -194,6 +195,7 @@ export class TableService {
   }
 
   async createTable(): Promise<void> {
+    await this.ensureConnected();
     const response = await this.socket?.emitWithAck('create_table');
     console.log('createTable response:', response);
     const table: Table = new Table(
@@ -216,6 +218,7 @@ export class TableService {
   }
 
   async leaveTable(tableId: number): Promise<void> {
+    await this.ensureConnected();
     const response = await this.socket?.emitWithAck('quit_table', { table_id: tableId });
     console.log('leaveTable response:', response);
     this.currentTable$.set(null);
