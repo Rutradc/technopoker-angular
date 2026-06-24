@@ -9,9 +9,9 @@ import { CardModel } from '../../models/cardModel';
 })
 export class Card {
   @Input() card: CardModel | undefined;
-  @Input() value : string = '';
-  @Input() suit : string = '';
-  @Input() size : string = 'm';
+  @Input() value: number = 0;
+  @Input() suit: string = '';
+  @Input() size: string = 'm';
   suitIcon: string = '';
   valueShowed: string = '';
   @HostBinding('style.--color') color = '#d40000';
@@ -22,48 +22,48 @@ export class Card {
       this.card = new CardModel(this.value, this.suit);
     }
 
-    switch (this.card.suit){
+    switch (this.card.suit) {
       case 'hearts':
-        this.suitIcon = '♥'
+        this.suitIcon = '♥';
         break;
       case 'diamonds':
-        this.suitIcon = '♦'
+        this.suitIcon = '♦';
         break;
       case 'clubs':
-        this.suitIcon = '♣'
-        this.color = '#000000'
+        this.suitIcon = '♣';
+        this.color = '#000000';
         break;
       case 'spades':
-        this.suitIcon = '♠'
-        this.color = '#000000'
-    }
-    
-    switch (this.card.value){
-      case 'king':
-        this.valueShowed = 'K'
-        break;
-      case 'queen':
-        this.valueShowed = 'Q'
-        break;
-      case 'jack':
-        this.valueShowed = 'J'
-        break;
-      case 'ace':
-        this.valueShowed = 'A'
-        break;
-      default:
-        this.valueShowed = this.card.value
+        this.suitIcon = '♠';
+        this.color = '#000000';
     }
 
-    switch (this.size){
+    switch (this.card.rank) {
+      case 13:
+        this.valueShowed = 'K';
+        break;
+      case 12:
+        this.valueShowed = 'Q';
+        break;
+      case 11:
+        this.valueShowed = 'J';
+        break;
+      case 14:
+        this.valueShowed = 'A';
+        break;
+      default:
+        this.valueShowed = this.card.rank.toString();
+    }
+
+    switch (this.size) {
       case 's':
-        this.sizeClass = 's'
+        this.sizeClass = 's';
         break;
       case 'm':
-        this.sizeClass = 'm'
+        this.sizeClass = 'm';
         break;
       case 'l':
-        this.sizeClass = 'l'
+        this.sizeClass = 'l';
         break;
     }
   }

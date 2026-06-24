@@ -1,9 +1,9 @@
 export class CardModel {
-    value: string;
-    suit: string;
+  rank: number;
+  suit: string;
 
-    constructor(value: string, suit: string) {
-        this.value = value;
-        this.suit = suit;
-    }
+  constructor(rank: number, suit: string) {
+    this.rank = rank;
+    this.suit = suit;
+  }
 }
