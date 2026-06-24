@@ -1,4 +1,15 @@
 /* You can add global styles to this file, and also import other style files */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap');
+
+body {
+  font-family: 'Montserrat', sans-serif;
+}
+
+h1 {
+  font-family: 'Cinzel', serif;
+  letter-spacing: 2px;
+}
+
 html, body {
   height: 100%;
   margin: 0;
