@@ -4,11 +4,11 @@ import { Table } from '../models/tableModel';
 import { Router } from '@angular/router';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class TableService {
-
   private socket!: Socket;
+  private connectPromise: Promise<void> | null = null;
 
   private router = inject(Router);
 
@@ -22,44 +22,119 @@ export class TableService {
   private _connected = signal(false);
   connected = computed(() => this._connected());
 
-  connect(): void {
-    this.socket = io('localhost:4587', {
-        auth: { 'username': this.username$() , 'token': this.token$()},
+  private async ensureConnected(): Promise<void> {
+    if (!this.connected()) {
+      await this.connect();
+    }
+  }
+
+  connect(): Promise<void> {
+    if (this.connectPromise) return this.connectPromise;
+
+    this.connectPromise = new Promise((resolve) => {
+      this.socket = io('localhost:4587', {
+        auth: { username: this.username$(), token: this.token$() },
         transports: ['websocket'],
-        reconnection: true
-    });
+        reconnection: true,
+      });
 
-    this.socket.on('connect', () => {
+      this.socket.on('connect', () => {
         this._connected.set(true);
-    });
+        resolve();
+      });
 
-    this.socket.on('disconnect', () => {
-      this._connected.set(false);
-    });
+      this.socket.on('disconnect', () => {
+        this._connected.set(false);
+        this.connectPromise = null; // allow reconnection
+      });
 
-    // écoute des messages
+      // écoute des messages
 
-    this.socket.on('auth_token', (data: any) => {
-      localStorage.setItem('token', data.token)
-      this.token$.set(data.token)
-    })
+      this.socket.on('auth_token', (data: any) => {
+        localStorage.setItem('token', data.token);
+        this.token$.set(data.token);
+      });
 
-    this.socket.on('error', (err: any) => {
-      console.error('Socket error:', err);
-    });
+      this.socket.on('error', (err: any) => {
+        console.error('Socket error:', err);
+      });
 
-    this.socket.on('joined_table', (data: any) => {
-      const current = this.currentTable$();
-      console.log('joined_table event received:', data);
-      if (!current)
-        return;
+      this.socket.on('joined_table', (data: any) => {
+        const current = this.currentTable$();
+        console.log('joined_table event received:', data);
+        if (!current) return;
 
-      if (data.entered) {
-        const updatedPlayers = [...current.players, data.player];
+        if (data.entered) {
+          const updatedPlayers = [...current.players, data.player];
+          this.currentTable$.set(
+            new Table(
+              current.table_id,
+              data.host_name,
+              current.table_cards,
+              current.pot,
+              updatedPlayers,
+              current.current_player_name,
+              current.small_blind_value,
+              current.big_blind_value,
+              current.small_blind_player_name,
+              current.big_blind_player_name,
+            ),
+          );
+        } else {
+          const updatedPlayers = current.players.filter(
+            (p) => p.player_name !== data.player.player_name,
+          );
+          this.currentTable$.set(
+            new Table(
+              current.table_id,
+              data.host_name,
+              current.table_cards,
+              current.pot,
+              updatedPlayers,
+              current.current_player_name,
+              current.small_blind_value,
+              current.big_blind_value,
+              current.small_blind_player_name,
+              current.big_blind_player_name,
+            ),
+          );
+        }
+      });
+
+      this.socket.on('game_started', (data: any) => {
+        const current = this.currentTable$();
+        console.log('game_started event received:', data);
+        if (!current) return;
+
         this.currentTable$.set(
           new Table(
             current.table_id,
             data.host_name,
+            data.table_cards,
+            data.pot,
+            data.players,
+            data.current_player_name,
+            data.small_blind_value,
+            data.big_blind_value,
+            data.small_blind_player_name,
+            data.big_blind_player_name,
+          ),
+        );
+        this.router.navigate(['/game', current.table_id]);
+      });
+
+      this.socket.on('cards_dealt', (data: any) => {
+        const current = this.currentTable$();
+        console.log('cards_dealt event received:', data);
+        if (!current) return;
+
+        const updatedPlayers = current.players.map((p) =>
+          p.player_name === this.username$() ? { ...p, hand: data.hand } : p,
+        );
+        this.currentTable$.set(
+          new Table(
+            current.table_id,
+            current.host_name,
             current.table_cards,
             current.pot,
             updatedPlayers,
@@ -70,74 +145,14 @@ export class TableService {
             current.big_blind_player_name,
           ),
         );
-      } else {
-        const updatedPlayers = current.players.filter((p) => p.player_name !== data.player.player_name);
-        this.currentTable$.set(
-          new Table(
-            current.table_id,
-            data.host_name,
-            current.table_cards,
-            current.pot,
-            updatedPlayers,
-            current.current_player_name,
-            current.small_blind_value,
-            current.big_blind_value,
-            current.small_blind_player_name,
-            current.big_blind_player_name,
-          ),
-        );
-      }
+      });
     });
-
-    this.socket.on('game_started', (data: any) => {
-      const current = this.currentTable$();
-      console.log('game_started event received:', data);
-      if (!current) return;
-
-      this.currentTable$.set(
-        new Table(
-          current.table_id,
-          data.host_name,
-          data.table_cards,
-          data.pot,
-          data.players,
-          data.current_player_name,
-          data.small_blind_value,
-          data.big_blind_value,
-          data.small_blind_player_name,
-          data.big_blind_player_name,
-        ),
-      );
-      this.router.navigate(['/game', current.table_id]);
-    });
-
-    this.socket.on('cards_dealt', (data: any) => {
-      const current = this.currentTable$();
-      console.log('cards_dealt event received:', data);
-      if (!current) return;
-
-      const updatedPlayers = current.players.map((p) =>
-        p.player_name === this.username$() ? { ...p, hand: data.hand } : p,
-      );
-      this.currentTable$.set(
-        new Table(
-          current.table_id,
-          current.host_name,
-          current.table_cards,
-          current.pot,
-          updatedPlayers,
-          current.current_player_name,
-          current.small_blind_value,
-          current.big_blind_value,
-          current.small_blind_player_name,
-          current.big_blind_player_name,
-        ),
-      );
-    });
+    return this.connectPromise;
   }
 
   // emit events
   async joinTable(tableId: number): Promise<void> {
+    await this.ensureConnected();
     const response = await this.socket?.emitWithAck('join_table', { table_id: tableId });
     console.log('joinTable response:', response);
     if (response) {
@@ -154,9 +169,7 @@ export class TableService {
         response.big_blind_player_name,
       );
       this.currentTable$.set(table);
-    }
-    else
-      this.currentTable$.set(null);
+    } else this.currentTable$.set(null);
     console.log('currentTable$ after joinTable:', this.currentTable$());
   }
 
