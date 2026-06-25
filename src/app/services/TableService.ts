@@ -2,6 +2,8 @@ import { Injectable, signal, computed, inject } from '@angular/core';
 import { io, Socket } from 'socket.io-client';
 import { Table } from '../models/tableModel';
 import { Router } from '@angular/router';
+import { environment } from '../../environments/environment';
+
 
 @Injectable({
   providedIn: 'root',
@@ -32,7 +34,7 @@ export class TableService {
     if (this.connectPromise) return this.connectPromise;
 
     this.connectPromise = new Promise((resolve) => {
-      this.socket = io('localhost:4587', {
+      this.socket = io(environment.BACK_URL, {
         auth: { username: this.username$(), token: this.token$() },
         transports: ['websocket'],
         reconnection: true,
