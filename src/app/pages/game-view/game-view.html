@@ -14,15 +14,31 @@
   <!-- 🃏 CARTES COMMUNES -->
   <div class="community-cards">
     @for(card of communityCards$(); track $index){
-        <app-card [card]="card"></app-card>
+        <app-card 
+          #cardRef
+          [attr.data-index]="10 + $index"
+          [card]="card">
+        </app-card>
     }
   </div>
 
   <!-- 🎴 MAIN JOUEUR -->
   <div class="player-hand">
     @for(card of playerHand$(); track $index){
-        <app-card [card]="card"></app-card>
+        <app-card 
+          #cardRef
+          [attr.data-index]="$index"
+          [card]="card">
+        </app-card>
     }
+  </div>
+
+  <div class="dealer-deck" #deckRef>
+    <app-card 
+      [isFaceDown]="true" 
+      [size]="'m'"
+      class="deck-card"
+    ></app-card>
   </div>
 
   <!-- 🎮 ACTIONS -->
@@ -54,7 +70,21 @@
       >
 
         <div class="player-info">
-          <div class="name">{{ p.player_name }}</div>
+          <div class="name">
+            {{ p.player_name }}
+
+            @if (playerMessages[p.player_name]) {
+              <span
+                class="player-action"
+                [class.folded]="playerMessages[p.player_name]?.type === 'fold'"
+                [class.called]="playerMessages[p.player_name]?.type === 'call'"
+                [class.raised]="playerMessages[p.player_name]?.type === 'raise'"
+                [class.allin]="playerMessages[p.player_name]?.type === 'allin'"
+              >
+                {{ playerMessages[p.player_name]?.text }}
+              </span>
+            }
+          </div>
           <div>💰 {{ p.chips }}</div>
           <div>Mise : {{ p.current_bet }}</div>
         </div>
