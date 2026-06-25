@@ -1,3 +1,4 @@
 export const environment = {
-    BACK_URL : 'technopoker-backend'
+    BACK_URL : '/socket.io/',
+    IS_PROD : true
 };
