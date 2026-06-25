@@ -58,13 +58,12 @@ export class GameView implements OnInit, AfterViewInit, OnChanges{
   });
 
   playerHand$ = computed(() => {
-    // const table = this.table$();
-    // if (!table) return [];
-    // const currentPlayer = table.players.find(
-    //   (p) => p.player_name === this.tableService.username$(),
-    // );
-    // return currentPlayer ? currentPlayer.hand : [];
-    return [new CardModel(12, 'hearts'), new CardModel(5, 'spades')]
+    const table = this.table$();
+    if (!table) return [];
+    const currentPlayer = table.players.find(
+      (p) => p.player_name === this.tableService.username$(),
+    );
+    return currentPlayer ? currentPlayer.hand : [];
   });
 
   players$ = computed(() => {
