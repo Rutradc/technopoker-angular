@@ -141,7 +141,23 @@ app-card {
   gap: 10px;
   padding: 10px 14px;
 
+  border-radius: 10px;
+
+  min-width: 220px;
+  position: relative;
+  overflow: visible;
+}
+
+.player-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 10px;
+  padding: 10px 14px;
+
   background: rgba(0, 0, 0, 0.25);
+
   border-radius: 10px;
 
   min-width: 220px;
@@ -152,9 +168,63 @@ app-card {
   gap: 6px;
 }
 
-.player.active {
-  border: 2px solid #ffd54f;
-  box-shadow: 0 0 10px rgba(255, 213, 79, 0.5);
+.player-inner.active {
+  position: relative;
+
+  border: 2px solid rgba(255, 213, 79, 0.9);
+  box-shadow:
+    0 0 10px rgba(255, 213, 79, 0.5),
+    0 0 25px rgba(255, 213, 79, 0.25);
+  animation: playerPulse 1.8s ease-in-out infinite;
+}
+
+.turn-badge {
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 1px;
+
+  color: #111;
+  background: linear-gradient(45deg, #ffd54f, #ffb300);
+
+  padding: 3px 6px;
+  border-radius: 6px;
+
+  box-shadow:
+    0 0 10px rgba(255, 213, 79, 0.6);
+
+  animation: badgePop 300ms ease-out;
+}
+
+@keyframes badgePop {
+  0% {
+    transform: scale(0.6);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes playerPulse {
+  0% {
+    transform: scale(1);
+    box-shadow:
+      0 0 10px rgba(255, 213, 79, 0.4),
+      0 0 20px rgba(255, 213, 79, 0.2);
+  }
+  50% {
+    transform: scale(1.02);
+    box-shadow:
+      0 0 18px rgba(255, 213, 79, 0.7),
+      0 0 35px rgba(255, 213, 79, 0.35);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow:
+      0 0 10px rgba(255, 213, 79, 0.4),
+      0 0 20px rgba(255, 213, 79, 0.2);
+  }
 }
 
 .player.folded {
@@ -254,6 +324,7 @@ app-card {
 .player-action {
   position: absolute;
   left: 100%;
+  bottom: 20px;
   margin-left: 5px;
 
   font-weight: 900;

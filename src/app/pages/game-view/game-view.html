@@ -64,41 +64,44 @@
     @for(p of players$(); track $index){
       <div
         class="player"
-        [class.active]="p.player_name === currentPlayerName$()"
         [class.folded]="p.is_folded"
         [class.out]="p.is_out"
       >
-
-        <div class="player-info">
-          <div class="name">
-            {{ p.player_name }}
-
-            @if (playerMessages[p.player_name]) {
-              <span
-                class="player-action"
-                [class.folded]="playerMessages[p.player_name]?.type === 'fold'"
-                [class.called]="playerMessages[p.player_name]?.type === 'call'"
-                [class.raised]="playerMessages[p.player_name]?.type === 'raise'"
-                [class.allin]="playerMessages[p.player_name]?.type === 'allin'"
-              >
-                {{ playerMessages[p.player_name]?.text }}
-              </span>
+        <div class="player-inner" [class.active]="p.player_name === currentPlayerName$()">
+          <div class="player-info">
+            @if (p.player_name === currentPlayerName$() && p.player_name === tableService.username$()) {
+              <span class="turn-badge">TON TOUR</span>
+            }
+            <div class="name">
+              {{ p.player_name }}
+  
+              @if (playerMessages[p.player_name]) {
+                <span
+                  class="player-action"
+                  [class.folded]="playerMessages[p.player_name]?.type === 'fold'"
+                  [class.called]="playerMessages[p.player_name]?.type === 'call'"
+                  [class.raised]="playerMessages[p.player_name]?.type === 'raise'"
+                  [class.allin]="playerMessages[p.player_name]?.type === 'allin'"
+                >
+                  {{ playerMessages[p.player_name]?.text }}
+                </span>
+              }
+            </div>
+            <div>💰 {{ p.chips }}</div>
+            <div>Mise : {{ p.current_bet }}</div>
+          </div>
+  
+          <div class="player-cards">
+            @if (!p.is_out) {
+              @for(card of p.hand; track $index){
+                <app-card [card]="card" [size]="'s'"></app-card>
+              }
+              @if(p.hand?.length == 0){
+                <app-card [size]="'s'" [isFaceDown]="true"></app-card>
+                <app-card [size]="'s'" [isFaceDown]="true"></app-card>
+              }
             }
           </div>
-          <div>💰 {{ p.chips }}</div>
-          <div>Mise : {{ p.current_bet }}</div>
-        </div>
-
-        <div class="player-cards">
-          @if (!p.is_out) {
-            @for(card of p.hand; track $index){
-              <app-card [card]="card" [size]="'s'"></app-card>
-            }
-            @if(p.hand?.length == 0){
-              <app-card [size]="'s'" [isFaceDown]="true"></app-card>
-              <app-card [size]="'s'" [isFaceDown]="true"></app-card>
-            }
-          }
         </div>
 
       </div>

@@ -85,15 +85,15 @@ export class GameView implements OnInit, AfterViewInit, OnChanges{
   }
 
   async ngOnInit(): Promise<void> {
-    if (!this.tableService.currentTable$()) {
-      this.router.navigate(['/tables']);
-      alert(
-        'La table est introuvable ou pleine ou votre pseudo est déjà utilisé dans cette table.',
-      );
-    }
     if (!this.table$()) {
       await this.tableService.joinTable(Number(this.route.snapshot.paramMap.get('id')));
     }
+    if (!this.tableService.currentTable$()) {
+    this.router.navigate(['/tables']);
+    alert(
+      'La table est introuvable ou pleine ou votre pseudo est déjà utilisé dans cette table.',
+    );
+  }
     // message qui dit c'est ton tour
     // this.showTurnNotification();
     this.showPlayerMessage(this.tableService.username$(), "ALL IN", 'allin');
