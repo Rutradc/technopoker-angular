@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, computed, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, computed, ElementRef, inject, QueryList, ViewChild, ViewChildren, AfterViewInit, OnInit, OnChanges, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CardModel } from '../../models/cardModel';
 import { Card } from '../../composants/card/card';
@@ -13,7 +13,7 @@ import { ActivatedRoute } from '@angular/router';
   templateUrl: './game-view.html',
   styleUrl: './game-view.css',
 })
-export class GameView {
+export class GameView implements OnInit, AfterViewInit, OnChanges{
   tableService = inject(TableService);
   table$ = this.tableService.currentTable$;
 
@@ -24,6 +24,26 @@ export class GameView {
     string,
     { text: string; type: 'fold' | 'call' | 'raise' | 'allin' } | null
   > = {};
+
+  @ViewChild('deckRef') deckRef!: ElementRef;
+  @ViewChildren('cardRef', { read: ElementRef }) cardRefs!: QueryList<ElementRef>;
+
+  animateCardToPosition(cardEl: HTMLElement) {
+    const deckRect = this.deckRef.nativeElement.getBoundingClientRect();
+    const cardRect = cardEl.getBoundingClientRect();
+
+    const deltaX = deckRect.left - cardRect.left;
+    const deltaY = deckRect.top - cardRect.top;
+
+    // position initiale = deck
+    cardEl.style.transform = `translate(${deltaX}px, ${deltaY}px) scale(0.8)`;
+    cardEl.style.transition = 'none';
+
+    requestAnimationFrame(() => {
+      cardEl.style.transition = 'transform 600ms ease, opacity 600ms';
+      cardEl.style.transform = `translate(0, 0) scale(1)`;
+    });
+  }
 
   pot$ = computed(() => {
     const table = this.table$();
@@ -71,11 +91,30 @@ export class GameView {
     if (!this.table$()) {
       await this.tableService.joinTable(Number(this.route.snapshot.paramMap.get('id')));
     }
-    this.showTurnNotification();
+    // this.showTurnNotification();
     this.showPlayerMessage(this.tableService.username$(), "ALL IN", 'allin');
     // this.showPlayerMessage(this.tableService.username$(), "Folded", 'fold');
     // this.showPlayerMessage(this.tableService.username$(), "Call", 'call');
     // this.showPlayerMessage(this.tableService.username$(), "Raise", 'raise');
+  }
+
+  sleep = (ms: number) => new Promise(r => setTimeout(r, ms))
+
+  ngAfterViewInit() {
+    console.log(this.cardRefs)
+    this.cardRefs.changes.subscribe(() => {
+      this.cardRefs.forEach(async (ref) => {
+        this.animateCardToPosition(ref.nativeElement);
+      });
+    });
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    this.table$.update((old) => old ? ({
+      ...old,
+      table_cards: old.table_cards.slice(0, 3)
+    }) : null)
+    console.log(this.table$())
   }
 
   fold() {

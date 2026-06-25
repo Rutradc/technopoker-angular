@@ -14,18 +14,26 @@
   <!-- 🃏 CARTES COMMUNES -->
   <div class="community-cards">
     @for(card of communityCards$(); track $index){
-        <app-card [card]="card"></app-card>
+        <app-card 
+          #cardRef
+          [attr.data-index]="$index"
+          [card]="card">
+        </app-card>
     }
   </div>
 
   <!-- 🎴 MAIN JOUEUR -->
   <div class="player-hand">
     @for(card of playerHand$(); track $index){
-        <app-card [card]="card"></app-card>
+        <app-card 
+          #cardRef
+          [attr.data-index]="$index"
+          [card]="card">
+        </app-card>
     }
   </div>
 
-  <div class="dealer-deck">
+  <div class="dealer-deck" #deckRef>
     <app-card 
       [isFaceDown]="true" 
       [size]="'m'"
