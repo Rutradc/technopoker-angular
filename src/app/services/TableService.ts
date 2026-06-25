@@ -24,8 +24,13 @@ export class TableService {
   connected = computed(() => this._connected());
 
   private async ensureConnected(): Promise<void> {
-    if (!this.connected()) {
-      await this.connect();
+    if (this.username$()){
+      if (!this.connected()) {
+        await this.connect();
+      }
+    }
+    else {
+      this.router.navigate(['/'])
     }
   }
 

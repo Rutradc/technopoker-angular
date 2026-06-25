@@ -1,11 +1,8 @@
 import { ChangeDetectorRef, Component, computed, ElementRef, inject, QueryList, ViewChild, ViewChildren, AfterViewInit, OnInit, OnChanges, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { CardModel } from '../../models/cardModel';
 import { Card } from '../../composants/card/card';
 import { TableService } from '../../services/TableService';
-import { Table } from '../../models/tableModel';
-import { Player } from '../../models/playerModel';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-game-view',
@@ -80,6 +77,7 @@ export class GameView implements OnInit, AfterViewInit, OnChanges{
     private fb: FormBuilder,
     private cdr: ChangeDetectorRef,
     private route: ActivatedRoute,
+    private router: Router
   ) {
     this.raiseForm = this.fb.group({
       raiseAmount: [this.raiseAmount, [Validators.required, Validators.min(5)]],
@@ -87,10 +85,16 @@ export class GameView implements OnInit, AfterViewInit, OnChanges{
   }
 
   async ngOnInit(): Promise<void> {
-    // simulation d'un tour de jeu
+    if (!this.tableService.currentTable$()) {
+      this.router.navigate(['/tables']);
+      alert(
+        'La table est introuvable ou pleine ou votre pseudo est déjà utilisé dans cette table.',
+      );
+    }
     if (!this.table$()) {
       await this.tableService.joinTable(Number(this.route.snapshot.paramMap.get('id')));
     }
+    // message qui dit c'est ton tour
     // this.showTurnNotification();
     this.showPlayerMessage(this.tableService.username$(), "ALL IN", 'allin');
     // this.showPlayerMessage(this.tableService.username$(), "Folded", 'fold');
