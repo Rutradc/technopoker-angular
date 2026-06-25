@@ -1,0 +1,15 @@
+name: TechnoPoker
+
+services:
+
+  technopoker-angular:
+      container_name: technopoker-angular
+      build: .
+      ports:
+        - "4202:80"
+#       networks:
+#       - portfolio-network
+
+# networks:
+#   portfolio-network:
+#     external: true
