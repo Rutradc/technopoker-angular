@@ -34,11 +34,23 @@ export class TableService {
     if (this.connectPromise) return this.connectPromise;
 
     this.connectPromise = new Promise((resolve) => {
-      this.socket = io(environment.BACK_URL, {
-        auth: { username: this.username$(), token: this.token$() },
-        transports: ['websocket'],
-        reconnection: true,
-      });
+      if (environment.IS_PROD){
+        console.log(environment)
+        this.socket = io('/', {
+          auth: { username: this.username$(), token: this.token$() },
+          path: environment.BACK_URL,
+          transports: ['websocket'],
+          reconnection: true,
+        }); 
+      }
+      else {
+        console.log(environment)
+        this.socket = io(environment.BACK_URL, {
+          auth: { username: this.username$(), token: this.token$() },
+          transports: ['websocket'],
+          reconnection: true,
+        });
+      }
 
       this.socket.on('connect', () => {
         this._connected.set(true);
