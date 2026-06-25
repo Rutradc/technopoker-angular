@@ -138,29 +138,6 @@ export class TableService {
         this.router.navigate(['/game', current.table_id]);
       });
 
-      this.socket.on('cards_dealt', (data: any) => {
-        const current = this.currentTable$();
-        if (!current) return;
-
-        const updatedPlayers = current.players.map((p) =>
-          p.player_name === this.username$() ? { ...p, hand: data.hand } : p,
-        );
-        this.currentTable$.set(
-          new Table(
-            current.table_id,
-            current.host_name,
-            current.table_cards,
-            current.pot,
-            updatedPlayers,
-            current.current_player_name,
-            current.small_blind_value,
-            current.big_blind_value,
-            current.small_blind_player_name,
-            current.big_blind_player_name,
-          ),
-        );
-      });
-
       this.socket.on('player_action', (data: any) => {
         const current = this.currentTable$();
         if (!current) return;
