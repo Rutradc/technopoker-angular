@@ -16,7 +16,7 @@
     @for(card of communityCards$(); track $index){
         <app-card 
           #cardRef
-          [attr.data-index]="$index"
+          [attr.data-index]="10 + $index"
           [card]="card">
         </app-card>
     }

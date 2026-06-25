@@ -40,7 +40,7 @@ export class GameView implements OnInit, AfterViewInit, OnChanges{
     cardEl.style.transition = 'none';
 
     requestAnimationFrame(() => {
-      cardEl.style.transition = 'transform 600ms ease, opacity 600ms';
+      cardEl.style.transition = 'transform 600ms cubic-bezier(.2,.8,.2,1), opacity 600ms';
       cardEl.style.transform = `translate(0, 0) scale(1)`;
     });
   }
@@ -58,12 +58,13 @@ export class GameView implements OnInit, AfterViewInit, OnChanges{
   });
 
   playerHand$ = computed(() => {
-    const table = this.table$();
-    if (!table) return [];
-    const currentPlayer = table.players.find(
-      (p) => p.player_name === this.tableService.username$(),
-    );
-    return currentPlayer ? currentPlayer.hand : [];
+    // const table = this.table$();
+    // if (!table) return [];
+    // const currentPlayer = table.players.find(
+    //   (p) => p.player_name === this.tableService.username$(),
+    // );
+    // return currentPlayer ? currentPlayer.hand : [];
+    return [new CardModel(12, 'hearts'), new CardModel(5, 'spades')]
   });
 
   players$ = computed(() => {
@@ -102,9 +103,12 @@ export class GameView implements OnInit, AfterViewInit, OnChanges{
 
   ngAfterViewInit() {
     console.log(this.cardRefs)
+    // cardRef with index +10 are community cards and 0 and 1 are hand cards
+    // ref.nativeElement.dataset.index to get index
     this.cardRefs.changes.subscribe(() => {
       this.cardRefs.forEach(async (ref) => {
         this.animateCardToPosition(ref.nativeElement);
+        // console.log(ref.nativeElement.dataset.index)
       });
     });
   }
