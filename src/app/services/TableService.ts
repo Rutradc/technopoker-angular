@@ -4,7 +4,6 @@ import { Table } from '../models/tableModel';
 import { Router } from '@angular/router';
 import { environment } from '../../environments/environment';
 
-
 @Injectable({
   providedIn: 'root',
 })
@@ -34,17 +33,14 @@ export class TableService {
     if (this.connectPromise) return this.connectPromise;
 
     this.connectPromise = new Promise((resolve) => {
-      if (environment.IS_PROD){
-        console.log(environment)
+      if (environment.IS_PROD) {
         this.socket = io('/', {
           auth: { username: this.username$(), token: this.token$() },
           path: environment.BACK_URL,
           transports: ['websocket'],
           reconnection: true,
-        }); 
-      }
-      else {
-        console.log(environment)
+        });
+      } else {
         this.socket = io(environment.BACK_URL, {
           auth: { username: this.username$(), token: this.token$() },
           transports: ['websocket'],
