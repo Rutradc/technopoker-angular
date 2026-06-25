@@ -62,7 +62,21 @@
       >
 
         <div class="player-info">
-          <div class="name">{{ p.player_name }}</div>
+          <div class="name">
+            {{ p.player_name }}
+
+            @if (playerMessages[p.player_name]) {
+              <span
+                class="player-action"
+                [class.folded]="playerMessages[p.player_name]?.type === 'fold'"
+                [class.called]="playerMessages[p.player_name]?.type === 'call'"
+                [class.raised]="playerMessages[p.player_name]?.type === 'raise'"
+                [class.allin]="playerMessages[p.player_name]?.type === 'allin'"
+              >
+                {{ playerMessages[p.player_name]?.text }}
+              </span>
+            }
+          </div>
           <div>💰 {{ p.chips }}</div>
           <div>Mise : {{ p.current_bet }}</div>
         </div>
