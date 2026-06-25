@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, computed, ElementRef, inject, QueryList, ViewChild, ViewChildren, AfterViewInit, OnInit, OnChanges, SimpleChanges } from '@angular/core';
+import { ChangeDetectorRef, Component, computed, ElementRef, inject, QueryList, ViewChild, ViewChildren, AfterViewInit, OnInit} from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Card } from '../../composants/card/card';
 import { TableService } from '../../services/TableService';
@@ -10,7 +10,7 @@ import { ActivatedRoute, Router } from '@angular/router';
   templateUrl: './game-view.html',
   styleUrl: './game-view.css',
 })
-export class GameView implements OnInit, AfterViewInit, OnChanges{
+export class GameView implements OnInit, AfterViewInit{
   tableService = inject(TableService);
   table$ = this.tableService.currentTable$;
 
@@ -37,7 +37,7 @@ export class GameView implements OnInit, AfterViewInit, OnChanges{
     cardEl.style.transition = 'none';
 
     requestAnimationFrame(() => {
-      cardEl.style.transition = 'transform 600ms cubic-bezier(.2,.8,.2,1), opacity 600ms';
+      cardEl.style.transition = 'transform 600ms cubic-bezier(.2,.8,.2,1)';
       cardEl.style.transform = `translate(0, 0) scale(1)`;
     });
   }
@@ -102,26 +102,30 @@ export class GameView implements OnInit, AfterViewInit, OnChanges{
     // this.showPlayerMessage(this.tableService.username$(), "Raise", 'raise');
   }
 
-  sleep = (ms: number) => new Promise(r => setTimeout(r, ms))
-
   ngAfterViewInit() {
     console.log(this.cardRefs)
-    // cardRef with index +10 are community cards and 0 and 1 are hand cards
-    // ref.nativeElement.dataset.index to get index
-    this.cardRefs.changes.subscribe(() => {
-      this.cardRefs.forEach(async (ref) => {
-        this.animateCardToPosition(ref.nativeElement);
-        // console.log(ref.nativeElement.dataset.index)
-      });
-    });
-  }
 
-  ngOnChanges(changes: SimpleChanges): void {
-    this.table$.update((old) => old ? ({
-      ...old,
-      table_cards: old.table_cards.slice(0, 3)
-    }) : null)
-    console.log(this.table$())
+    this.cardRefs.changes.subscribe(() => {
+      let maxIndex = this.cardRefs.toArray().sort((ref1, ref2) => +ref2.nativeElement.dataset.index - +ref1.nativeElement.dataset.index)[0].nativeElement.dataset.index
+      console.log(maxIndex)
+      if (maxIndex > 12){
+        let cardToAnimate = this.cardRefs.find((ref) => ref.nativeElement.dataset.index == maxIndex)
+        this.animateCardToPosition(cardToAnimate?.nativeElement);
+      }
+      else {
+        if (maxIndex >= 10) {
+          this.cardRefs.forEach(async (ref) => {
+            if (ref.nativeElement.dataset.index >= 10)
+              this.animateCardToPosition(ref.nativeElement);
+          });
+        }
+        else {
+          this.cardRefs.forEach(async (ref) => {
+            this.animateCardToPosition(ref.nativeElement);
+          });
+        }
+      }
+    });
   }
 
   fold() {
