@@ -1,4 +1,4 @@
-import { Component, HostBinding, Input } from '@angular/core';
+import { Component, HostBinding, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { CardModel } from '../../models/cardModel';
 
 @Component({
@@ -7,7 +7,7 @@ import { CardModel } from '../../models/cardModel';
   templateUrl: './card.html',
   styleUrl: './card.css',
 })
-export class Card {
+export class Card implements OnChanges {
   @Input() card: CardModel | undefined;
   @Input() size: string = 'm';
   @Input() isFaceDown: boolean = false;
@@ -17,15 +17,26 @@ export class Card {
   @HostBinding('style.--color') color = '#d40000';
   @HostBinding('style.--size') sizeClass = 'm';
 
-  ngOnInit(): void {
+  ngOnChanges(changes: SimpleChanges): void {
     this.sizeClass = this.size;
 
-    if (!this.isFaceDown) {
-      this.buildCard();
+    if (this.isFaceDown || !this.card) {
+      this.resetCard();
+      return;
     }
+
+    this.buildCard();
+  }
+
+  private resetCard() {
+    this.suitIcon = '';
+    this.valueShowed = '';
+    this.color = '#d40000';
   }
 
   private buildCard() {
+    this.resetCard();
+
     switch (this.card!.suit) {
       case 'hearts':
         this.suitIcon = '♥';
