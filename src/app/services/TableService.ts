@@ -159,6 +159,30 @@ export class TableService {
           ),
         );
       });
+
+      this.socket.on('end_round', (data: any) => {
+        const current = this.currentTable$();
+        if (!current) return;
+
+        const table_data = data.table;
+        // TODO : handle end of round logic, e.g., show winner, reset bets, etc.
+
+        this.currentTable$.set(
+          new Table(
+            current.table_id,
+            current.host_name,
+            table_data.table_cards,
+            table_data.pot,
+            table_data.players,
+            table_data.has_started,
+            table_data.current_player_name,
+            table_data.small_blind_value,
+            table_data.big_blind_value,
+            table_data.small_blind_player_name,
+            table_data.big_blind_player_name,
+          ),
+        );
+      });
     });
     return this.connectPromise;
   }
