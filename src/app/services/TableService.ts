@@ -261,4 +261,8 @@ export class TableService {
   async allIn(tableId: number): Promise<void> {
     this.socket?.emit('all_in', { table_id: tableId });
   }
+
+  async readyForNextRound(tableId: number): Promise<void> {
+    this.socket?.emit('round_ready', { table_id: tableId });
+  }
 }

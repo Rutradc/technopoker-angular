@@ -1,12 +1,14 @@
 import { ChangeDetectorRef, Component, computed, ElementRef, inject, QueryList, ViewChild, ViewChildren, AfterViewInit, OnInit} from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Card } from '../../composants/card/card';
+import { RoundSummaryModel } from '../../models/roundSummaryModel';
+import { RoundSummary } from '../round-summary/round-summary';
 import { TableService } from '../../services/TableService';
 import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-game-view',
-  imports: [ReactiveFormsModule, Card],
+  imports: [ReactiveFormsModule, Card, RoundSummary],
   templateUrl: './game-view.html',
   styleUrl: './game-view.css',
 })
@@ -21,6 +23,8 @@ export class GameView implements OnInit, AfterViewInit{
     string,
     { text: string; type: 'fold' | 'call' | 'raise' | 'allin' } | null
   > = {};
+
+  roundSummary: RoundSummaryModel | null = null;
 
   @ViewChild('deckRef') deckRef!: ElementRef;
   @ViewChildren('cardRef', { read: ElementRef }) cardRefs!: QueryList<ElementRef>;
@@ -126,6 +130,58 @@ export class GameView implements OnInit, AfterViewInit{
         }
       }
     });
+
+    const newSummary: RoundSummaryModel = {
+      round_number: 3,
+      winner_name: 'Alice',
+      pot: 520,
+      community_cards: [
+        { rank: 10, suit: 'hearts' },
+        { rank: 11, suit: 'spades' },
+        { rank: 12, suit: 'diamonds' },
+        { rank: 7, suit: 'clubs' },
+        { rank: 2, suit: 'hearts' },
+      ],
+      players: [
+        {
+          player_name: 'Alice',
+          hand: [
+            { rank: 14, suit: 'spades' },
+            { rank: 13, suit: 'hearts' },
+          ],
+          chips_change: 180,
+          is_winner: true,
+        },
+        {
+          player_name: 'Bob',
+          hand: [
+            { rank: 10, suit: 'clubs' },
+            { rank: 10, suit: 'diamonds' },
+          ],
+          chips_change: -60,
+          is_winner: false,
+        },
+        {
+          player_name: 'Claire',
+          hand: [
+            { rank: 8, suit: 'hearts' },
+            { rank: 9, suit: 'spades' },
+          ],
+          chips_change: -120,
+          is_winner: false,
+        },
+        {
+          player_name: 'David',
+          hand: [
+            { rank: 5, suit: 'clubs' },
+            { rank: 7, suit: 'diamonds' },
+          ],
+          chips_change: -40,
+          is_winner: false,
+        },
+      ],
+    };
+    // this.displayRoundSummary(newSummary);
   }
 
   fold() {
@@ -174,5 +230,17 @@ export class GameView implements OnInit, AfterViewInit{
       this.playerMessages[playerName] = null;
       this.cdr.detectChanges();
     }, 1500);
+  }
+
+  displayRoundSummary(summary: RoundSummaryModel) {
+    this.roundSummary = summary;
+  }
+
+  async handleRoundContinue() {
+    const tableId = this.table$()?.table_id;
+    this.roundSummary = null;
+    if (tableId) {
+      await this.tableService.readyForNextRound(tableId);
+    }
   }
 }
