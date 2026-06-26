@@ -152,9 +152,7 @@ export class GameView implements OnInit, AfterViewInit{
 
     if (!currentPlayer) return;
 
-    const amount = currentPlayer.chips;
-
-    this.tableService.raise(table.table_id, amount);
+    this.tableService.allIn(table.table_id);
 
     // 🎮 animation message
     this.showPlayerMessage(currentPlayer.player_name, "ALL IN", "allin");

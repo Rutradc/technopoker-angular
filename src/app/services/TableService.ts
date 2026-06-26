@@ -257,4 +257,8 @@ export class TableService {
   async raise(tableId: number, amount: number): Promise<void> {
     this.socket?.emit('raise', { table_id: tableId, amount });
   }
+
+  async allIn(tableId: number): Promise<void> {
+    this.socket?.emit('all_in', { table_id: tableId });
+  }
 }
