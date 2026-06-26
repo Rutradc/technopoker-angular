@@ -1,9 +1,10 @@
-FROM node:24 AS build
+FROM node:alpine AS build
 WORKDIR /src
 RUN npm i -g @angular/cli
-COPY . .
+COPY package.json package-lock.json ./
 RUN npm ci
-RUN ng build
+COPY . .
+RUN ng build --output-path=dist/technopoker/browser
 
 FROM nginx:alpine3.22
 COPY --from=build /src/dist/technopoker/browser /usr/share/nginx/html
