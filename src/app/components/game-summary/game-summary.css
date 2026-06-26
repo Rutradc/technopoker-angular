@@ -1,0 +1,168 @@
+.game-summary-overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: radial-gradient(circle at top, rgba(0,0,0,0.4), rgba(0,0,0,0.95));
+  z-index: 10000;
+  padding: 20px;
+}
+
+.game-summary-card {
+  width: min(840px, calc(100vw - 40px));
+  max-height: calc(100vh - 60px);
+  overflow-y: auto;
+  background: linear-gradient(180deg, #12220f 0%, #0d1510 100%);
+  border-radius: 24px;
+  border: 2px solid rgba(255,255,255,0.1);
+  box-shadow: 0 0 60px rgba(0, 0, 0, 0.65);
+  padding: 28px;
+  color: white;
+}
+
+.summary-header {
+  display: grid;
+  gap: 10px;
+  margin-bottom: 22px;
+}
+
+.summary-title {
+  font-size: 32px;
+  font-weight: 900;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.summary-winner-block {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.winner-label {
+  color: #f9d976;
+  text-transform: uppercase;
+  font-size: 12px;
+  letter-spacing: 0.2em;
+  padding: 6px 12px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 999px;
+}
+
+.winner-name {
+  font-size: 24px;
+  font-weight: 900;
+  color: #ffe082;
+  text-shadow: 0 0 12px rgba(255, 235, 59, 0.25);
+}
+
+.summary-board {
+  display: grid;
+  gap: 12px;
+  margin-bottom: 18px;
+  padding: 18px;
+  border: 1px solid rgba(255,255,255,0.08);
+  background: rgba(255,255,255,0.03);
+  border-radius: 18px;
+}
+
+.board-label {
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: #b8c2b0;
+}
+
+.board-cards {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.summary-body {
+  display: grid;
+  gap: 18px;
+}
+
+.summary-pot {
+  font-size: 16px;
+  font-weight: 700;
+  color: #dcdcdc;
+}
+
+.summary-players {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+
+.summary-player {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 18px;
+  padding: 18px;
+  display: grid;
+  gap: 12px;
+  transition: transform 200ms ease, border-color 200ms ease;
+}
+
+.summary-player.winner {
+  border-color: #fdd835;
+  background: rgba(255, 255, 255, 0.1);
+  box-shadow: inset 0 0 28px rgba(255, 216, 77, 0.12);
+}
+
+.player-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.player-name {
+  font-weight: 800;
+  font-size: 16px;
+}
+
+.player-result {
+  font-weight: 900;
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.1);
+}
+
+.player-result.win {
+  color: #66ff8b;
+  background: rgba(65, 221, 125, 0.16);
+}
+
+.player-result.loss {
+  color: #ff8b8b;
+  background: rgba(255, 97, 97, 0.16);
+}
+
+.player-hand {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.player-badge {
+  align-self: flex-start;
+  padding: 5px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  color: #ffffff;
+  background: linear-gradient(90deg, rgba(255, 214, 79, 0.95), rgba(255, 196, 0, 0.85));
+}
+
+.summary-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 8px;
+}

@@ -1,8 +1,8 @@
 import { ChangeDetectorRef, Component, computed, ElementRef, inject, QueryList, ViewChild, ViewChildren, AfterViewInit, OnInit} from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { Card } from '../../composants/card/card';
+import { Card } from '../../components/card/card';
 import { RoundSummaryModel } from '../../models/roundSummaryModel';
-import { RoundSummary } from '../round-summary/round-summary';
+import { RoundSummary } from '../../components/round-summary/round-summary';
 import { TableService } from '../../services/TableService';
 import { ActivatedRoute, Router } from '@angular/router';
 

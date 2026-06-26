@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { Card } from '../../composants/card/card';
+import { Card } from '../card/card';
 import { RoundSummaryModel } from '../../models/roundSummaryModel';
 
 @Component({
