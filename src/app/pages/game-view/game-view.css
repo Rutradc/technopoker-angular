@@ -487,3 +487,34 @@ app-card {
     background-position: 200% 50%;
   }
 }
+
+.btn.allin-btn {
+  background: linear-gradient(
+    45deg,
+    #ffd700,
+    #ffecb3,
+    #ffc107
+  );
+
+  color: #1a1a1a;
+  font-weight: 900;
+  letter-spacing: 1px;
+
+  box-shadow:
+    0 0 10px rgba(255, 215, 0, 0.6),
+    0 0 20px rgba(255, 193, 7, 0.4);
+
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.btn.allin-btn:hover {
+  transform: scale(1.05);
+
+  box-shadow:
+    0 0 15px rgba(255, 215, 0, 0.9),
+    0 0 30px rgba(255, 193, 7, 0.6);
+}
+
+.btn.allin-btn:active {
+  transform: scale(0.95);
+}

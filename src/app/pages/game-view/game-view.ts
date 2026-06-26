@@ -142,6 +142,24 @@ export class GameView implements OnInit, AfterViewInit{
     this.tableService.raise(this.table$()?.table_id!, value);
   }
 
+  allIn() {
+    const table = this.table$();
+    if (!table) return;
+
+    const currentPlayer = table.players.find(
+      (p) => p.player_name === this.tableService.username$()
+    );
+
+    if (!currentPlayer) return;
+
+    const amount = currentPlayer.chips;
+
+    this.tableService.raise(table.table_id, amount);
+
+    // 🎮 animation message
+    this.showPlayerMessage(currentPlayer.player_name, "ALL IN", "allin");
+  }
+
   showTurnNotification() {
     this.showTurnMessage = true;
 
