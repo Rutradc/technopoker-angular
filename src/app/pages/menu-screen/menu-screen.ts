@@ -24,6 +24,14 @@ export class MenuScreen {
     if (this.username()) {
       this.tableService.connect();
     }
+    if (this.tableService.currentTable$()){
+      if (confirm(`Vous étiez connecté à la partie ${this.tableService.currentTable$()?.table_id}, voulez-vous vous reconnecter à cette partie ?`)){
+        if (this.tableService.currentTable$()?.has_started)
+          this.router.navigate([`/game/${this.tableService.currentTable$()?.table_id}`])
+        else
+          this.router.navigate([`/table/${this.tableService.currentTable$()?.table_id}`])
+      }
+    }
   }
 
   confirmUsername() {

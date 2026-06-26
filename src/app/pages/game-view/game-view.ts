@@ -1,10 +1,11 @@
-import { ChangeDetectorRef, Component, computed, ElementRef, inject, QueryList, ViewChild, ViewChildren, AfterViewInit, OnInit} from '@angular/core';
+import { ChangeDetectorRef, Component, computed, ElementRef, inject, QueryList, ViewChild, ViewChildren, AfterViewInit, OnInit, effect} from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Card } from '../../components/card/card';
 import { RoundSummaryModel } from '../../models/roundSummaryModel';
 import { RoundSummary } from '../../components/round-summary/round-summary';
 import { TableService } from '../../services/TableService';
 import { ActivatedRoute, Router } from '@angular/router';
+import { PlayerAction } from 'app/models/playerActionModel';
 
 @Component({
   selector: 'app-game-view',
@@ -21,7 +22,7 @@ export class GameView implements OnInit, AfterViewInit{
 
   playerMessages: Record<
     string,
-    { text: string; type: 'fold' | 'call' | 'raise' | 'allin' } | null
+    { text: string; action: string; } | null
   > = {};
 
   roundSummary: RoundSummaryModel | null = null;
@@ -58,6 +59,14 @@ export class GameView implements OnInit, AfterViewInit{
     return table ? table.table_cards : [];
   });
 
+  actionAnimationListener = effect(() =>{
+    const lastPlayerAction = this.tableService.lastPlayerAction$()
+    console.log(lastPlayerAction)
+
+    if (lastPlayerAction)
+      this.showPlayerMessage(lastPlayerAction);
+  })
+
   playerHand$ = computed(() => {
     const table = this.table$();
     if (!table) return [];
@@ -93,22 +102,16 @@ export class GameView implements OnInit, AfterViewInit{
       await this.tableService.joinTable(Number(this.route.snapshot.paramMap.get('id')));
     }
     if (!this.tableService.currentTable$()) {
-    this.router.navigate(['/tables']);
-    alert(
-      'La table est introuvable ou pleine ou votre pseudo est déjà utilisé dans cette table.',
-    );
-  }
+      this.router.navigate(['/tables']);
+      alert(
+        'La table est introuvable ou pleine ou votre pseudo est déjà utilisé dans cette table.',
+      );
+    }
     // message qui dit c'est ton tour
     // this.showTurnNotification();
-    this.showPlayerMessage(this.tableService.username$(), "ALL IN", 'allin');
-    // this.showPlayerMessage(this.tableService.username$(), "Folded", 'fold');
-    // this.showPlayerMessage(this.tableService.username$(), "Call", 'call');
-    // this.showPlayerMessage(this.tableService.username$(), "Raise", 'raise');
   }
 
   ngAfterViewInit() {
-    console.log(this.cardRefs)
-
     this.cardRefs.changes.subscribe(() => {
       let maxIndex = this.cardRefs.toArray().sort((ref1, ref2) => +ref2.nativeElement.dataset.index - +ref1.nativeElement.dataset.index)[0].nativeElement.dataset.index
       console.log(maxIndex)
@@ -149,8 +152,8 @@ export class GameView implements OnInit, AfterViewInit{
             { rank: 14, suit: 'spades' },
             { rank: 13, suit: 'hearts' },
           ],
-          chips_change: 180,
-          is_winner: true,
+          // chips_change: 180,
+          // is_winner: true,
         },
         {
           player_name: 'Bob',
@@ -158,8 +161,8 @@ export class GameView implements OnInit, AfterViewInit{
             { rank: 10, suit: 'clubs' },
             { rank: 10, suit: 'diamonds' },
           ],
-          chips_change: -60,
-          is_winner: false,
+          // chips_change: -60,
+          // is_winner: false,
         },
         {
           player_name: 'Claire',
@@ -167,8 +170,8 @@ export class GameView implements OnInit, AfterViewInit{
             { rank: 8, suit: 'hearts' },
             { rank: 9, suit: 'spades' },
           ],
-          chips_change: -120,
-          is_winner: false,
+          // chips_change: -120,
+          // is_winner: false,
         },
         {
           player_name: 'David',
@@ -176,8 +179,8 @@ export class GameView implements OnInit, AfterViewInit{
             { rank: 5, suit: 'clubs' },
             { rank: 7, suit: 'diamonds' },
           ],
-          chips_change: -40,
-          is_winner: false,
+          // chips_change: -40,
+          // is_winner: false,
         },
       ],
     };
@@ -209,9 +212,6 @@ export class GameView implements OnInit, AfterViewInit{
     if (!currentPlayer) return;
 
     this.tableService.allIn(table.table_id);
-
-    // 🎮 animation message
-    this.showPlayerMessage(currentPlayer.player_name, "ALL IN", "allin");
   }
 
   showTurnNotification() {
@@ -223,11 +223,25 @@ export class GameView implements OnInit, AfterViewInit{
     }, 1900);
   }
 
-  showPlayerMessage(playerName: string, message: string, message_type: 'fold' | 'call' | 'raise' | 'allin') {
-    this.playerMessages[playerName] = { text: message, type: message_type};
+  showPlayerMessage(playerAction: PlayerAction) {
+    let textMessage = ""
+    switch (playerAction.action){
+      case 'all_in':
+        textMessage = 'ALL IN'
+        break;
+      case 'call':
+        textMessage = 'CALL'
+        break
+      case 'fold':
+        textMessage = 'FOLD'
+        break
+      case 'raise':
+        textMessage = `${playerAction.amount} RAISE`
+    }
+    this.playerMessages[playerAction.player_name] = { text: textMessage, action: playerAction.action };
 
     setTimeout(() => {
-      this.playerMessages[playerName] = null;
+      this.playerMessages[playerAction.player_name] = null;
       this.cdr.detectChanges();
     }, 1500);
   }

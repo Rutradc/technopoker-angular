@@ -23,12 +23,12 @@
 
           <div class="summary-players">
             @for (player of summary.players; track $index){
-                <div class="summary-player" [class.winner]="player.is_winner">
+                <div class="summary-player" [class.winner]="player.player_name == summary.winner_name">
                   <div class="player-top">
                     <div class="player-name">{{ player.player_name }}</div>
-                    <div class="player-result" [class.win]="player.chips_change > 0" [class.loss]="player.chips_change < 0">
+                    <!-- <div class="player-result" [class.win]="player.chips_change > 0" [class.loss]="player.chips_change < 0">
                       {{ player.chips_change > 0 ? '+' : '' }}{{ player.chips_change }}
-                    </div>
+                    </div> -->
                   </div>
 
                   <div class="player-hand">
@@ -36,7 +36,7 @@
                         <app-card [card]="card" [size]="'s'"></app-card>
                     }
                   </div>
-                  @if (player.is_winner){
+                  @if (player.player_name == summary.winner_name){
                       <div class="player-badge">MAIN GAGNANTE</div>
                   }
                 </div>

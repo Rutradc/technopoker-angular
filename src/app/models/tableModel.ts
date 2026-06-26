@@ -5,6 +5,7 @@ export class Table {
   table_id: number;
   host_name: string;
   table_cards: CardModel[];
+  has_started: boolean;
   pot: number;
   players: Player[];
   small_blind_value: number;
@@ -17,6 +18,7 @@ export class Table {
     table_id: number,
     host_name: string,
     table_cards: CardModel[],
+    has_started: boolean,
     pot: number,
     players: Player[],
     current_player_name: string | null,
@@ -28,6 +30,7 @@ export class Table {
     this.table_id = table_id;
     this.host_name = host_name;
     this.table_cards = table_cards;
+    this.has_started = has_started;
     this.pot = pot;
     this.players = players;
     this.current_player_name = current_player_name;

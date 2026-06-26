@@ -12,10 +12,6 @@ export class RoundSummary {
   @Input() summary: RoundSummaryModel | null = null;
   @Output() continue = new EventEmitter<void>();
 
-  get gainCount() {
-    return this.summary?.players.filter((p) => p.chips_change > 0).length ?? 0;
-  }
-
   onContinue() {
     this.continue.emit();
   }

@@ -3,8 +3,8 @@ import { CardModel } from './cardModel';
 export interface RoundPlayerSummary {
   player_name: string;
   hand: CardModel[];
-  chips_change: number;
-  is_winner: boolean;
+  // chips_change: number;
+  // is_winner: boolean;
 }
 
 export interface RoundSummaryModel {

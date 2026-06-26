@@ -10,8 +10,4 @@ import { RoundSummaryModel } from 'app/models/roundSummaryModel';
 })
 export class GameSummary {
   @Input() summary: RoundSummaryModel | null = null;
-
-  get gainCount() {
-    return this.summary?.players.filter((p) => p.chips_change > 0).length ?? 0;
-  }
 }

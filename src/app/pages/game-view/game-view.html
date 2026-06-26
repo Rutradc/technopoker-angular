@@ -82,10 +82,10 @@
               @if (playerMessages[p.player_name]) {
                 <span
                   class="player-action"
-                  [class.folded]="playerMessages[p.player_name]?.type === 'fold'"
-                  [class.called]="playerMessages[p.player_name]?.type === 'call'"
-                  [class.raised]="playerMessages[p.player_name]?.type === 'raise'"
-                  [class.allin]="playerMessages[p.player_name]?.type === 'allin'"
+                  [class.folded]="playerMessages[p.player_name]?.action === 'fold'"
+                  [class.called]="playerMessages[p.player_name]?.action === 'call'"
+                  [class.raised]="playerMessages[p.player_name]?.action === 'raise'"
+                  [class.allin]="playerMessages[p.player_name]?.action === 'all_in'"
                 >
                   {{ playerMessages[p.player_name]?.text }}
                 </span>

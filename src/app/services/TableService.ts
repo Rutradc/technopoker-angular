@@ -3,6 +3,7 @@ import { io, Socket } from 'socket.io-client';
 import { Table } from '../models/tableModel';
 import { Router } from '@angular/router';
 import { environment } from '../../environments/environment';
+import { PlayerAction } from 'app/models/playerActionModel';
 
 @Injectable({
   providedIn: 'root',
@@ -18,6 +19,7 @@ export class TableService {
   currentTable$ = signal<Table | null>(null);
   username$ = signal<string>(localStorage.getItem('username') || '');
   token$ = signal<string | null>(localStorage.getItem('token') || null);
+  lastPlayerAction$ = signal<PlayerAction | null>(null)
 
   // état de connexion
   private _connected = signal(false);
@@ -86,6 +88,7 @@ export class TableService {
               current.table_id,
               data.host_name,
               current.table_cards,
+              current.has_started,
               current.pot,
               updatedPlayers,
               current.current_player_name,
@@ -104,6 +107,7 @@ export class TableService {
               current.table_id,
               data.host_name,
               current.table_cards,
+              current.has_started,
               current.pot,
               updatedPlayers,
               current.current_player_name,
@@ -126,6 +130,7 @@ export class TableService {
             current.table_id,
             data.host_name,
             data.table_cards,
+            data.has_started,
             data.pot,
             data.players,
             data.current_player_name,
@@ -143,12 +148,13 @@ export class TableService {
         if (!current) return;
 
         const table_data = data.table;
-
+        
         this.currentTable$.set(
           new Table(
             current.table_id,
             current.host_name,
             table_data.table_cards,
+            table_data.has_started,
             table_data.pot,
             table_data.players,
             table_data.current_player_name,
@@ -157,6 +163,14 @@ export class TableService {
             table_data.small_blind_player_name,
             table_data.big_blind_player_name,
           ),
+        );
+
+        this.lastPlayerAction$.set(
+          new PlayerAction(
+            data.action,
+            data.player.player_name,
+            data.amount
+          )
         );
       });
 
@@ -172,9 +186,9 @@ export class TableService {
             current.table_id,
             current.host_name,
             table_data.table_cards,
+            table_data.has_started,
             table_data.pot,
             table_data.players,
-            table_data.has_started,
             table_data.current_player_name,
             table_data.small_blind_value,
             table_data.big_blind_value,
@@ -197,6 +211,7 @@ export class TableService {
         response.table_id,
         response.host_name,
         response.table_cards,
+        response.has_started,
         response.pot,
         response.players,
         response.current_player_name,
@@ -219,6 +234,7 @@ export class TableService {
           t.table_id,
           t.host_name,
           t.table_cards,
+          t.has_started,
           t.pot,
           t.players,
           t.current_player_name,
@@ -239,6 +255,7 @@ export class TableService {
       response.table_id,
       response.host_name,
       response.table_cards,
+      response.has_started,
       response.pot,
       response.players,
       response.current_player_name,
