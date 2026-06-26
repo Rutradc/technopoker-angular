@@ -2,27 +2,27 @@
     <div class="round-summary-overlay">
       <div class="round-summary-card">
         <div class="summary-header">
-          <div class="summary-title">Round #{{ summary?.round_number }}</div>
+          <div class="summary-title">Round #{{ summary.round_number }}</div>
           <div class="summary-winner-block">
             <span class="winner-label">Vainqueur</span>
-            <span class="winner-name">{{ summary?.winner_name || 'Aucun' }}</span>
+            <span class="winner-name">{{ summary.winner_name || 'Aucun' }}</span>
           </div>
         </div>
 
         <div class="summary-board">
           <div class="board-label">Cartes communes</div>
           <div class="board-cards">
-            @for(card of summary?.community_cards; track $index){
+            @for(card of summary.community_cards; track $index){
               <app-card [card]="card" [size]="'s'"></app-card>
             }
           </div>
         </div>
 
         <div class="summary-body">
-          <div class="summary-pot">Pot total : {{ summary?.pot }} jetons</div>
+          <div class="summary-pot">Pot total : {{ summary.pot }} jetons</div>
 
           <div class="summary-players">
-            @for (player of summary?.players; track $index){
+            @for (player of summary.players; track $index){
                 <div class="summary-player" [class.winner]="player.is_winner">
                   <div class="player-top">
                     <div class="player-name">{{ player.player_name }}</div>
