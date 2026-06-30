@@ -8,9 +8,14 @@ export interface RoundPlayerSummary {
 }
 
 export interface RoundSummaryModel {
-  round_number: number;
+  round_number: number | null;
   winner_name: string | null;
   pot: number;
   community_cards: CardModel[];
   players: RoundPlayerSummary[];
+}
+
+export interface GameSummaryModel {
+  winner_name: string;
+  winner_chips: number;
 }

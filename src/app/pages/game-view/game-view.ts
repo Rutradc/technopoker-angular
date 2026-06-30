@@ -1,15 +1,16 @@
 import { ChangeDetectorRef, Component, computed, ElementRef, inject, QueryList, ViewChild, ViewChildren, AfterViewInit, OnInit, effect} from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Card } from '../../components/card/card';
-import { RoundSummaryModel } from '../../models/roundSummaryModel';
+import { GameSummaryModel, RoundSummaryModel } from '../../models/roundSummaryModel';
 import { RoundSummary } from '../../components/round-summary/round-summary';
 import { TableService } from '../../services/TableService';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PlayerAction } from 'app/models/playerActionModel';
+import { GameSummary } from "app/components/game-summary/game-summary";
 
 @Component({
   selector: 'app-game-view',
-  imports: [ReactiveFormsModule, Card, RoundSummary],
+  imports: [ReactiveFormsModule, Card, RoundSummary, GameSummary],
   templateUrl: './game-view.html',
   styleUrl: './game-view.css',
 })
@@ -26,7 +27,8 @@ export class GameView implements OnInit, AfterViewInit{
   > = {};
 
   roundSummary: RoundSummaryModel | null = null;
-
+  gameSummary: GameSummaryModel | null = null;
+  
   @ViewChild('deckRef') deckRef!: ElementRef;
   @ViewChildren('cardRef', { read: ElementRef }) cardRefs!: QueryList<ElementRef>;
 
@@ -65,6 +67,18 @@ export class GameView implements OnInit, AfterViewInit{
 
     if (lastPlayerAction)
       this.showPlayerMessage(lastPlayerAction);
+  })
+
+  endRoundListener = effect(() => {
+    const roundSummary = this.tableService.roundSummary$()
+    if (roundSummary)
+      this.displayRoundSummary(roundSummary);
+  })
+
+  endGameListener = effect(() => {
+    const gameSummary = this.tableService.gameSummary$()
+    if (gameSummary)
+      this.displayGameSummary(gameSummary);
   })
 
   playerHand$ = computed(() => {
@@ -250,11 +264,24 @@ export class GameView implements OnInit, AfterViewInit{
     this.roundSummary = summary;
   }
 
+  displayGameSummary(summary: GameSummaryModel) {
+    this.gameSummary = summary;
+  }
+
   async handleRoundContinue() {
     const tableId = this.table$()?.table_id;
     this.roundSummary = null;
     if (tableId) {
       await this.tableService.readyForNextRound(tableId);
+    }
+  }
+
+  async leaveTable() {
+    const tableId = this.table$()?.table_id;
+    this.gameSummary = null;
+    if (tableId) {
+      await this.tableService.leaveTable(tableId)
+      this.router.navigate([''])
     }
   }
 }

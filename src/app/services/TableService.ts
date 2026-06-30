@@ -4,6 +4,7 @@ import { Table } from '../models/tableModel';
 import { Router } from '@angular/router';
 import { environment } from '../../environments/environment';
 import { PlayerAction } from 'app/models/playerActionModel';
+import { GameSummaryModel, RoundPlayerSummary, RoundSummaryModel } from 'app/models/roundSummaryModel';
 
 @Injectable({
   providedIn: 'root',
@@ -17,6 +18,8 @@ export class TableService {
   // signal qui stocke la liste de parties en attente
   tableList$ = signal<Table[]>([]);
   currentTable$ = signal<Table | null>(null);
+  roundSummary$ = signal<RoundSummaryModel | null>(null);
+  gameSummary$ = signal<GameSummaryModel | null>(null);
   username$ = signal<string>(localStorage.getItem('username') || '');
   token$ = signal<string | null>(localStorage.getItem('token') || null);
   lastPlayerAction$ = signal<PlayerAction | null>(null)
@@ -175,12 +178,30 @@ export class TableService {
       });
 
       this.socket.on('end_round', (data: any) => {
+        console.log(data)
+        let players : RoundPlayerSummary[] = []
+        for (let player of data.players){
+          players.push({
+            player_name : player.player_name,
+            hand : player.hand
+          })
+        }
+        this.roundSummary$.set({
+          round_number : null,
+          winner_name : data.winners[0].player_name,
+          pot : data.pot,
+          community_cards : data.table_cards,
+          players : players
+        })
+        // TODO : handle end of round logic, e.g., show winner, reset bets, etc.
+      });
+
+      this.socket.on('next_round', (data: any) => {
         const current = this.currentTable$();
         if (!current) return;
 
         const table_data = data.table;
-        // TODO : handle end of round logic, e.g., show winner, reset bets, etc.
-
+        
         this.currentTable$.set(
           new Table(
             current.table_id,
@@ -196,7 +217,14 @@ export class TableService {
             table_data.big_blind_player_name,
           ),
         );
-      });
+      })
+
+      this.socket.on('end_game', (data: any) => {
+        this.gameSummary$.set({
+          winner_name : data.player_name,
+          winner_chips : data.chips
+        })
+      })
     });
     return this.connectPromise;
   }

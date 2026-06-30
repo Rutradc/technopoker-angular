@@ -1,13 +1,17 @@
-import { Component, Input } from '@angular/core';
-import { Card } from "../card/card";
-import { RoundSummaryModel } from 'app/models/roundSummaryModel';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { GameSummaryModel } from 'app/models/roundSummaryModel';
 
 @Component({
   selector: 'app-game-summary',
-  imports: [Card],
+  imports: [],
   templateUrl: './game-summary.html',
   styleUrl: './game-summary.css',
 })
 export class GameSummary {
-  @Input() summary: RoundSummaryModel | null = null;
+  @Input() summary: GameSummaryModel | null = null;
+  @Output() leaveTable = new EventEmitter<void>();
+
+  onLeave() {
+    this.leaveTable.emit();
+  }
 }
