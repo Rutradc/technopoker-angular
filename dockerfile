@@ -4,7 +4,7 @@ RUN npm i -g @angular/cli
 COPY package.json package-lock.json ./
 RUN npm ci
 COPY . .
-RUN ng build --output-path=dist/technopoker/browser
+RUN ng build
 
 FROM nginx:alpine3.22
 COPY --from=build /src/dist/technopoker/browser /usr/share/nginx/html
