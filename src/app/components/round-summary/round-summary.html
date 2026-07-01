@@ -32,6 +32,10 @@
                   </div>
 
                   <div class="player-hand">
+                    @if(player.hand?.length == 0){
+                        <app-card [size]="'s'" [isFaceDown]="true"></app-card>
+                        <app-card [size]="'s'" [isFaceDown]="true"></app-card>
+                    }
                     @for (card of player.hand; track $index){
                         <app-card [card]="card" [size]="'s'"></app-card>
                     }
