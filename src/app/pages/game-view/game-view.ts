@@ -32,23 +32,6 @@ export class GameView implements OnInit, AfterViewInit{
   @ViewChild('deckRef') deckRef!: ElementRef;
   @ViewChildren('cardRef', { read: ElementRef }) cardRefs!: QueryList<ElementRef>;
 
-  animateCardToPosition(cardEl: HTMLElement) {
-    const deckRect = this.deckRef.nativeElement.getBoundingClientRect();
-    const cardRect = cardEl.getBoundingClientRect();
-
-    const deltaX = deckRect.left - cardRect.left;
-    const deltaY = deckRect.top - cardRect.top;
-
-    // position initiale = deck
-    cardEl.style.transform = `translate(${deltaX}px, ${deltaY}px) scale(0.8)`;
-    cardEl.style.transition = 'none';
-
-    requestAnimationFrame(() => {
-      cardEl.style.transition = 'transform 600ms cubic-bezier(.2,.8,.2,1)';
-      cardEl.style.transform = `translate(0, 0) scale(1)`;
-    });
-  }
-
   pot$ = computed(() => {
     const table = this.table$();
     return table ? table.pot : 0;
@@ -79,6 +62,13 @@ export class GameView implements OnInit, AfterViewInit{
     const gameSummary = this.tableService.gameSummary$()
     if (gameSummary)
       this.displayGameSummary(gameSummary);
+  })
+
+  turnListener = effect(() => {
+    const table = this.table$();
+    if (!table) return;
+    if (table.current_player_name === this.tableService.username$())
+      this.showTurnNotification()
   })
 
   playerHand$ = computed(() => {
@@ -226,6 +216,23 @@ export class GameView implements OnInit, AfterViewInit{
     if (!currentPlayer) return;
 
     this.tableService.allIn(table.table_id);
+  }
+
+  animateCardToPosition(cardEl: HTMLElement) {
+    const deckRect = this.deckRef.nativeElement.getBoundingClientRect();
+    const cardRect = cardEl.getBoundingClientRect();
+
+    const deltaX = deckRect.left - cardRect.left;
+    const deltaY = deckRect.top - cardRect.top;
+
+    // position initiale = deck
+    cardEl.style.transform = `translate(${deltaX}px, ${deltaY}px) scale(0.8)`;
+    cardEl.style.transition = 'none';
+
+    requestAnimationFrame(() => {
+      cardEl.style.transition = 'transform 600ms cubic-bezier(.2,.8,.2,1)';
+      cardEl.style.transform = `translate(0, 0) scale(1)`;
+    });
   }
 
   showTurnNotification() {
