@@ -2,6 +2,7 @@ import { Component, computed, signal } from '@angular/core';
 import { Table } from '../../models/tableModel';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TableService } from '../../services/TableService';
+import { MessageModalService } from '../../services/message-modal.service';
 
 @Component({
   selector: 'app-game-waiting-room',
@@ -19,6 +20,7 @@ export class GameWaitingRoom {
     private route: ActivatedRoute,
     private router: Router,
     private tableService: TableService,
+    private modalService: MessageModalService,
   ) {
     this.table$ = this.tableService.currentTable$;
   }
@@ -26,10 +28,12 @@ export class GameWaitingRoom {
   async ngOnInit(): Promise<void> {
     await this.tableService.joinTable(Number(this.route.snapshot.paramMap.get('id')));
     if (!this.tableService.currentTable$()) {
-      this.router.navigate(['/tables']);
-      alert(
-        'La table est introuvable ou pleine ou votre pseudo est déjà utilisé dans cette table.',
-      );
+      this.modalService.open({
+        title: 'Table inaccessible',
+        message: 'La table est introuvable ou pleine ou votre pseudo est déjà utilisé dans cette table.',
+        confirmLabel: 'Voir les tables',
+        redirectTo: ['/tables'],
+      });
     }
   }
 
@@ -39,10 +43,17 @@ export class GameWaitingRoom {
   }
 
   async leaveTable() {
-    if (confirm('Quitter la table ?')) {
-      console.log('Quitter la table', this.table$()?.table_id);
-      await this.tableService.leaveTable(this.table$()?.table_id!);
-      this.router.navigate(['']);
-    }
+    this.modalService.open({
+      title: 'Quitter la table',
+      message: 'Quitter la table ?',
+      type: 'confirm',
+      confirmLabel: 'Oui',
+      cancelLabel: 'Non',
+      onConfirm: async () => {
+        console.log('Quitter la table', this.table$()?.table_id);
+        await this.tableService.leaveTable(this.table$()?.table_id!);
+      },
+      redirectTo: [''],
+    });
   }
 }

@@ -7,6 +7,7 @@ import { TableService } from '../../services/TableService';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PlayerAction } from 'app/models/playerActionModel';
 import { GameSummary } from "app/components/game-summary/game-summary";
+import { MessageModalService } from '../../services/message-modal.service';
 
 @Component({
   selector: 'app-game-view',
@@ -94,7 +95,8 @@ export class GameView implements OnInit, AfterViewInit{
     private fb: FormBuilder,
     private cdr: ChangeDetectorRef,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private modalService: MessageModalService
   ) {
     this.raiseForm = this.fb.group({
       raiseAmount: [this.raiseAmount, [Validators.required, Validators.min(5)]],
@@ -106,10 +108,12 @@ export class GameView implements OnInit, AfterViewInit{
       await this.tableService.joinTable(Number(this.route.snapshot.paramMap.get('id')));
     }
     if (!this.tableService.currentTable$()) {
-      this.router.navigate(['/tables']);
-      alert(
-        'La table est introuvable ou pleine ou votre pseudo est déjà utilisé dans cette table.',
-      );
+      this.modalService.open({
+        title: 'Table inaccessible',
+        message: 'La table est introuvable ou pleine ou votre pseudo est déjà utilisé dans cette table.',
+        confirmLabel: 'Voir les tables',
+        redirectTo: ['/tables'],
+      });
     }
     // message qui dit c'est ton tour
     // this.showTurnNotification();

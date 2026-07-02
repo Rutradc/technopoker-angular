@@ -2,6 +2,7 @@ import { Component, computed } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { TableService } from '../../services/TableService';
+import { MessageModalService } from '../../services/message-modal.service';
 
 @Component({
   selector: 'app-menu-screen',
@@ -14,7 +15,7 @@ export class MenuScreen {
   username = computed(() => this.tableService.username$());
   connected = computed(() => this.tableService.connected());
 
-  constructor(private fb: FormBuilder, private router: Router, private tableService: TableService) {
+  constructor(private fb: FormBuilder, private router: Router, private tableService: TableService, private modalService: MessageModalService) {
     this.form = this.fb.group({
       username: [this.username() ? this.username() : '', [Validators.required, Validators.minLength(2)]]
     });
@@ -25,12 +26,23 @@ export class MenuScreen {
       this.tableService.connect();
     }
     if (this.tableService.currentTable$()){
-      if (confirm(`Vous étiez connecté à la partie ${this.tableService.currentTable$()?.table_id}, voulez-vous vous reconnecter à cette partie ?`)){
-        if (this.tableService.currentTable$()?.has_started)
-          this.router.navigate([`/game/${this.tableService.currentTable$()?.table_id}`])
-        else
-          this.router.navigate([`/table/${this.tableService.currentTable$()?.table_id}`])
-      }
+      this.modalService.open({
+        title: 'Reconnexion',
+        message: `Vous étiez connecté à la partie ${this.tableService.currentTable$()?.table_id}, voulez-vous vous reconnecter à cette partie ?`,
+        type: 'confirm',
+        confirmLabel: 'Rejoindre',
+        cancelLabel: 'Non merci',
+        onConfirm: () => {
+          const tableId = this.tableService.currentTable$()?.table_id;
+          if (!tableId) return;
+
+          if (this.tableService.currentTable$()?.has_started) {
+            this.router.navigate([`/game/${tableId}`]);
+          } else {
+            this.router.navigate([`/table/${tableId}`]);
+          }
+        }
+      });
     }
   }
 

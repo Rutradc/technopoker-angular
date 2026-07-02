@@ -1,0 +1,21 @@
+@if (isOpen()) {
+  <div class="modal-backdrop" (click)="cancel()">
+    <div class="modal-card" role="dialog" aria-modal="true" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <div class="modal-title">{{ title() }}</div>
+        <div class="modal-chip">Poker</div>
+      </div>
+
+      <div class="modal-body">
+        <p>{{ message() }}</p>
+      </div>
+
+      <div class="modal-actions">
+        @if (type() === 'confirm') {
+          <button type="button" class="btn secondary" (click)="cancel()">{{ cancelLabel() }}</button>
+        }
+        <button type="button" class="btn primary" (click)="confirm()">{{ confirmLabel() }}</button>
+      </div>
+    </div>
+  </div>
+}
