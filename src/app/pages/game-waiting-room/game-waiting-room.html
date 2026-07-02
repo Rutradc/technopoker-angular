@@ -1,66 +1,68 @@
 @if (table$()) {
-  <div class="waiting-room">
-
-    <h2>Table #{{ table$()!.table_id }}</h2>
-
-    <div class="content">
-
-      <!-- 🟢 TABLE INFOS -->
-      <div class="table-info">
-        <table>
-          <tr>
-            <th>Hôte</th>
-            <td>{{ table$()!.host_name }}</td>
-          </tr>
-
-          <tr>
-            <th>Joueurs</th>
-            <td>{{ table$()!.players.length }}</td>
-          </tr>
-
-          <tr>
-            <th>ID Table</th>
-            <td>#{{ table$()!.table_id }}</td>
-          </tr>
-        </table>
+  <div class="waiting-room-container">
+    <div class="waiting-room">
+  
+      <h2>Table #{{ table$()!.table_id }}</h2>
+  
+      <div class="content">
+  
+        <!-- 🟢 TABLE INFOS -->
+        <div class="table-info">
+          <table>
+            <tr>
+              <th>Hôte</th>
+              <td>{{ table$()!.host_name }}</td>
+            </tr>
+  
+            <tr>
+              <th>Joueurs</th>
+              <td>{{ table$()!.players.length }}</td>
+            </tr>
+  
+            <tr>
+              <th>ID Table</th>
+              <td>#{{ table$()!.table_id }}</td>
+            </tr>
+          </table>
+        </div>
+  
+        <!-- 🟡 LISTE JOUEURS -->
+        <div class="players-list">
+          <h3>Joueurs</h3>
+  
+          <ul>
+            @for (player of table$()!.players; track player) {
+              <li>
+                  {{ player.player_name }}
+                  @if (player.player_name === username()) {
+                      <span class="me-badge">vous</span>
+                  }
+              </li>
+            }
+          </ul>
+        </div>
+  
       </div>
-
-      <!-- 🟡 LISTE JOUEURS -->
-      <div class="players-list">
-        <h3>Joueurs</h3>
-
-        <ul>
-          @for (player of table$()!.players; track player) {
-            <li>
-                {{ player.player_name }}
-                @if (player.player_name === username()) {
-                    <span class="me-badge">vous</span>
-                }
-            </li>
+  
+      <p class="status">En attente d'autres joueurs...</p>
+  
+      @if (table$()!.host_name == username()) {
+        <p class="host-message">
+          Vous êtes l'hôte de cette table. Vous pouvez lancer la partie lorsque tous les joueurs sont prêts.
+        </p>
+      }
+      <div class="actions">
+          <button class="btn leave" (click)="leaveTable()">
+              Quitter la table
+          </button>
+  
+          @if (table$()!.host_name == username()) {
+              <button class="btn start" (click)="startGame()">
+              Lancer la partie
+              </button>
           }
-        </ul>
       </div>
-
+  
     </div>
-
-    <p class="status">En attente d'autres joueurs...</p>
-
-    @if (table$()!.host_name == username()) {
-      <p class="host-message">
-        Vous êtes l'hôte de cette table. Vous pouvez lancer la partie lorsque tous les joueurs sont prêts.
-      </p>
-    }
-    <div class="actions">
-        <button class="btn leave" (click)="leaveTable()">
-            Quitter la table
-        </button>
-
-        @if (table$()!.host_name == username()) {
-            <button class="btn start" (click)="startGame()">
-            Lancer la partie
-            </button>
-        }
-    </div>
-
   </div>
 }

@@ -1,25 +1,41 @@
 <div class="table-list">
-
-  <button class="btn back" (click)="goToMenu()">
-    ← Menu principal
-  </button>
-
-  <h2>Tables disponibles</h2>
+  <div class="table-list__header">
+    <button class="btn back" (click)="goToMenu()">
+      ← Menu principal
+    </button>
+    <div>
+      <p class="eyebrow">Poker en ligne</p>
+      <h2>Tables disponibles</h2>
+    </div>
+  </div>
 
   <div class="tables-container">
     @for(table of tables$(); track $index){
-      <div class="table-card">
-        <div class="info">
-          <p><strong>Table #{{ table.table_id }}</strong></p>
-          <p>Joueurs : {{ table.players.length }}</p>
-          <p>Hôte : {{ table.host_name }}</p>
+      <article class="table-card">
+        <div class="table-card__top">
+          <div class="table-badge">Table #{{ table.table_id }}</div>
+          <div class="table-status">{{ table.players.length }}/6 joueurs</div>
+        </div>
+
+        <div class="table-card__body">
+          <div class="info-row">
+            <span class="info-label">Hôte</span>
+            <span class="info-value">{{ table.host_name }}</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Blinds</span>
+            <span class="info-value">{{ table.small_blind_value }} / {{ table.big_blind_value }}</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">État</span>
+            <span class="info-value">{{ table.has_started ? 'Partie en cours' : 'En attente' }}</span>
+          </div>
         </div>
 
         <button class="btn join" (click)="joinTable(table)">
           Rejoindre
         </button>
-      </div>
+      </article>
     }
   </div>
-
 </div>

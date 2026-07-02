@@ -5,7 +5,7 @@
   background: radial-gradient(circle at center, #0f5f2e 0%, #0a3d1f 100%);
   display: flex;
   justify-content: center;
-  align-items: center;
+  /* align-items: center; */
   position: relative;
 }
 
