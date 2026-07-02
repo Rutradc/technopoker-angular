@@ -6,8 +6,8 @@
   align-items: center;
   justify-content: center;
   padding: 20px;
-  background: rgba(4, 10, 15, 0.86);
-  backdrop-filter: blur(6px);
+  background: rgba(4, 10, 15, 0.4);
+  backdrop-filter: blur(1px);
 }
 
 .modal-card {
