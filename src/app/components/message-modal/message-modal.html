@@ -1,5 +1,5 @@
 @if (isOpen()) {
-  <div class="modal-backdrop" (click)="cancel()">
+  <div class="modal-backdrop" (click)="backdropClick()">
     <div class="modal-card" role="dialog" aria-modal="true" (click)="$event.stopPropagation()">
       <div class="modal-header">
         <div class="modal-title">{{ title() }}</div>

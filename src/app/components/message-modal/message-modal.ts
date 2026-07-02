@@ -24,4 +24,13 @@ export class MessageModal {
   async cancel(): Promise<void> {
     await this.modalService.cancel();
   }
+
+  async backdropClick(): Promise<void> {
+    if (this.type() === 'confirm') {
+      await this.cancel();
+      return;
+    }
+
+    await this.confirm();
+  }
 }
