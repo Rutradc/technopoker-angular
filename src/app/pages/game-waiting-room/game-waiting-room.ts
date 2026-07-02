@@ -38,7 +38,7 @@ export class GameWaitingRoom {
   }
 
   startGame() {
-    console.log('Démarrage de la partie pour la table', this.table$()?.table_id);
+    // console.log('Démarrage de la partie pour la table', this.table$()?.table_id);
     this.tableService.startGame(this.table$()?.table_id!);
   }
 
@@ -50,7 +50,7 @@ export class GameWaitingRoom {
       confirmLabel: 'Oui',
       cancelLabel: 'Non',
       onConfirm: async () => {
-        console.log('Quitter la table', this.table$()?.table_id);
+        // console.log('Quitter la table', this.table$()?.table_id);
         await this.tableService.leaveTable(this.table$()?.table_id!);
       },
       redirectTo: [''],

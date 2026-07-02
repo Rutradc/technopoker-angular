@@ -81,7 +81,7 @@ export class TableService {
 
       this.socket.on('joined_table', (data: any) => {
         const current = this.currentTable$();
-        console.log('joined_table event received:', data);
+        // console.log('joined_table event received:', data);
         if (!current) return;
 
         if (data.entered) {
@@ -125,7 +125,7 @@ export class TableService {
 
       this.socket.on('game_started', (data: any) => {
         const current = this.currentTable$();
-        console.log('game_started event received:', data);
+        // console.log('game_started event received:', data);
         if (!current) return;
 
         this.currentTable$.set(
@@ -178,7 +178,7 @@ export class TableService {
       });
 
       this.socket.on('end_round', (data: any) => {
-        console.log(data)
+        // console.log(data)
         let players : RoundPlayerSummary[] = []
         for (let player of data.players){
           players.push({
@@ -233,7 +233,7 @@ export class TableService {
   async joinTable(tableId: number): Promise<void> {
     await this.ensureConnected();
     const response = await this.socket?.emitWithAck('join_table', { table_id: tableId });
-    console.log('joinTable response:', response);
+    // console.log('joinTable response:', response);
     if (response) {
       const table: Table = new Table(
         response.table_id,
@@ -250,7 +250,7 @@ export class TableService {
       );
       this.currentTable$.set(table);
     } else this.currentTable$.set(null);
-    console.log('currentTable$ after joinTable:', this.currentTable$());
+    // console.log('currentTable$ after joinTable:', this.currentTable$());
   }
 
   async listTables(): Promise<void> {
@@ -278,7 +278,7 @@ export class TableService {
   async createTable(): Promise<void> {
     await this.ensureConnected();
     const response = await this.socket?.emitWithAck('create_table');
-    console.log('createTable response:', response);
+    // console.log('createTable response:', response);
     const table: Table = new Table(
       response.table_id,
       response.host_name,
@@ -302,7 +302,7 @@ export class TableService {
   async leaveTable(tableId: number): Promise<void> {
     await this.ensureConnected();
     const response = await this.socket?.emitWithAck('quit_table', { table_id: tableId });
-    console.log('leaveTable response:', response);
+    // console.log('leaveTable response:', response);
     this.currentTable$.set(null);
   }
 

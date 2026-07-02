@@ -66,15 +66,15 @@ export class MenuScreen {
   }
 
   async createGame() {
-    console.log('Créer partie avec:', this.username);
+    // console.log('Créer partie avec:', this.username);
     await this.tableService.createTable();
-    console.log(this.tableService.currentTable$());
+    // console.log(this.tableService.currentTable$());
     let id = this.tableService.currentTable$()?.table_id;
     this.router.navigate([`/table/${id}`]);
   }
 
   joinGame() {
-    console.log('Rejoindre partie avec:', this.username);
+    // console.log('Rejoindre partie avec:', this.username);
     this.router.navigate(['/tables']);
   }
 }

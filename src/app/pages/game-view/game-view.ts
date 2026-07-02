@@ -47,7 +47,7 @@ export class GameView implements OnInit, AfterViewInit{
 
   actionAnimationListener = effect(() =>{
     const lastPlayerAction = this.tableService.lastPlayerAction$()
-    console.log(lastPlayerAction)
+    // console.log(lastPlayerAction)
 
     if (lastPlayerAction)
       this.showPlayerMessage(lastPlayerAction);
@@ -122,7 +122,7 @@ export class GameView implements OnInit, AfterViewInit{
   ngAfterViewInit() {
     this.cardRefs.changes.subscribe(() => {
       let maxIndex = this.cardRefs.toArray().sort((ref1, ref2) => +ref2.nativeElement.dataset.index - +ref1.nativeElement.dataset.index)[0].nativeElement.dataset.index
-      console.log(maxIndex)
+      // console.log(maxIndex)
       if (maxIndex > 12){
         let cardToAnimate = this.cardRefs.find((ref) => ref.nativeElement.dataset.index == maxIndex)
         this.animateCardToPosition(cardToAnimate?.nativeElement);
